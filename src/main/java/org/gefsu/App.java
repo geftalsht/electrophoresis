@@ -6,7 +6,7 @@ public class App
 
         IConfigurationManager configurationManager = new ConfigurationManager();
         ServerConfiguration serverConfiguration = configurationManager.loadServerConfiguration();
-        ElectrophoresisServer server = new ElectrophoresisServer();
+        IElectrophoresisServer server = new ElectrophoresisServer();
 
         server.start(serverConfiguration);
     }

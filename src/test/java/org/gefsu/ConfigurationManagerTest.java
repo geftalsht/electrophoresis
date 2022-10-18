@@ -10,7 +10,7 @@ class ConfigurationManagerTest {
 
     // Configuration can be loaded from the YAML file
     @Test
-    void loadServerConfiguration() {
+    void configurationLoadsFromYaml() {
         Yaml yaml = new Yaml();
 
         InputStream inputStream = this.getClass()

@@ -1,28 +1,59 @@
 package org.gefsu;
 
 import org.jetbrains.annotations.NotNull;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ElectrophoresisServer {
+public class ElectrophoresisServer implements IElectrophoresisServer {
 
-    int port;
+    ServerSocket serverSocket;
+    Socket clientSocket;
 
+    @Override
+    @SuppressWarnings("InfiniteLoopStatement")
     public void start(@NotNull ServerConfiguration configuration) {
 
-        port = configuration.getPortNumber();
+        int port = configuration.getPortNumber();
 
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
-            System.out.println("Hello, my frens!");
-            Socket socket = serverSocket.accept();
+        try {
+            serverSocket = new ServerSocket(port);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        catch (IOException e) {
-            System.out.println("IO Error while opening the socket.");
-        }
-        catch (IllegalArgumentException e) {
-            System.out.println("Invalid port number.");
+
+        while (true) {
+            this.listen();
         }
     }
 
+    private void listen() {
+
+        try {
+            clientSocket = serverSocket.accept();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try(BufferedReader reader = new BufferedReader(
+                new InputStreamReader(clientSocket.getInputStream())))
+        {
+            // TODO Pass request information to the handler
+            IRequestHandler handler = new RequestHandler();
+            handler.handleRequest(reader.readLine(), clientSocket);
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void stop() {
+        try {
+            serverSocket.close();
+            clientSocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
