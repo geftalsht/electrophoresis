@@ -8,9 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GetReceiver extends Receiver {
+public class GetRequestReceiver extends Receiver {
 
-    public GetReceiver(Socket clientSocket, String clientRequest) {
+    public GetRequestReceiver(Socket clientSocket, String clientRequest) {
         super(clientSocket, clientRequest);
     }
 

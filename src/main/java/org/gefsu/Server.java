@@ -30,8 +30,8 @@ public class Server {
              BufferedReader reader = new BufferedReader(
                     new InputStreamReader(clientSocket.getInputStream())))
         {
-            RequestHandler handler = new RequestHandler(clientSocket);
-            handler.processRequest(reader.readLine());
+            RequestHandler handler = new RequestHandler();
+            handler.processRequest(clientSocket, reader.readLine());
         }
     }
 }

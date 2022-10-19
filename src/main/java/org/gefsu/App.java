@@ -4,7 +4,7 @@ public class App
 {
     public static void main(String[] args) {
 
-        if (args.length < 1) {
+        if (1 > args.length) {
             System.out.println("Pass a port number as an argument");
             return;
         }

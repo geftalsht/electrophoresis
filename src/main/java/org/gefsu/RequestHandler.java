@@ -1,33 +1,27 @@
 package org.gefsu;
 
-import lombok.AllArgsConstructor;
-import org.gefsu.http.GetReceiver;
+import org.gefsu.http.GetRequestReceiver;
 import org.gefsu.http.Receiver;
 import org.gefsu.http.BadRequestReceiver;
 import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@AllArgsConstructor
 public class RequestHandler {
 
-    private Socket clientSocket;
+    public void processRequest(Socket clientSocket, String clientRequest) {
 
-    // Could be better
-    public void processRequest(String clientRequest) {
         Receiver receiver;
         String httpVerb = extractHttpVerb(clientRequest);
 
         // If httpVerb is GET process it as a GET request.
-        if ((httpVerb != null) && httpVerb.equals("GET")) {
-            receiver = new GetReceiver(clientSocket, clientRequest);
-            receiver.receive();
-        }
+        if ((httpVerb != null) && httpVerb.equals("GET"))
+            receiver = new GetRequestReceiver(clientSocket, clientRequest);
         // If anything else (including null) 400.
-        else {
+        else
             receiver = new BadRequestReceiver(clientSocket, clientRequest);
-            receiver.receive();
-        }
+
+        receiver.receive();
     }
 
     private String extractHttpVerb(String clientRequest) {
