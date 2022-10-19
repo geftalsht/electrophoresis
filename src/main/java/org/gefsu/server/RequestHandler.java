@@ -1,8 +1,9 @@
 package org.gefsu.server;
 
 import lombok.AllArgsConstructor;
-import org.gefsu.http.GetRequest;
-import org.gefsu.http.Request;
+import org.gefsu.http.GetReceiver;
+import org.gefsu.http.Receiver;
+import org.gefsu.http.BadRequestReceiver;
 import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,28 +13,33 @@ public class RequestHandler implements IRequestHandler {
 
     private Socket clientSocket;
 
+    // Could be better
     @Override
     public void processRequest(String clientRequest) {
+        Receiver receiver;
+        String httpVerb = extractHttpVerb(clientRequest);
 
-        String verb = "";
+        // If httpVerb is GET process it as a GET request.
+        if ((httpVerb != null) && httpVerb.equals("GET")) {
+            receiver = new GetReceiver(clientSocket, clientRequest);
+            receiver.receive();
+        }
+        // If anything else (including null) 400.
+        else {
+            receiver = new BadRequestReceiver(clientSocket, clientRequest);
+            receiver.receive();
+        }
+    }
+
+    private String extractHttpVerb(String clientRequest) {
+
         Pattern pattern = Pattern.compile("^\\w+");
         Matcher matcher = pattern.matcher(clientRequest);
 
         // Find an HTTP verb with regex. If no verb found 400.
         if (matcher.find()) {
-            verb = matcher.group().toUpperCase();
+            return(matcher.group().toUpperCase());
         }
-        else {
-            // 400 BAD REQUEST
-        }
-
-        // If verb is GET process it as a GET request. If anything else 400.
-        if (verb.equals("GET")) {
-            Request request = new GetRequest(clientSocket, clientRequest);
-            request.process();
-        }
-        else {
-            // 400 BAD REQUEST
-        }
+        return null;
     }
 }

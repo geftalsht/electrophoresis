@@ -13,12 +13,13 @@ public class ConfigurationManager implements IConfigurationManager {
 
         Yaml yaml = new Yaml();
 
-        try (InputStream inputStream = this.getClass()
+        try (InputStream inputStream = getClass()
                              .getClassLoader()
                              .getResourceAsStream("config/serverconfig.yml"))
         {
             serverConfiguration = yaml.load(inputStream);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             System.out.println("Error reading configuration file");
         }
 
