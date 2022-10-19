@@ -1,8 +1,7 @@
-package org.gefsu;
+package org.gefsu.configuration;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import java.io.Serializable;
 
 @Getter

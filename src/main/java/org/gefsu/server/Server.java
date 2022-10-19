@@ -1,11 +1,12 @@
-package org.gefsu;
+package org.gefsu.server;
 
+import org.gefsu.configuration.ServerConfiguration;
 import org.jetbrains.annotations.NotNull;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ElectrophoresisServer implements IElectrophoresisServer {
+public class Server implements IServer {
 
     ServerSocket serverSocket;
     Socket clientSocket;
@@ -29,24 +30,26 @@ public class ElectrophoresisServer implements IElectrophoresisServer {
 
     private void listen() {
 
+        // Create a clientSocket object
         try {
             clientSocket = serverSocket.accept();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        try(BufferedReader reader = new BufferedReader(
+        // Read String from the clientSocket. Send it to the request handler.
+        try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(clientSocket.getInputStream())))
         {
-            // TODO Pass request information to the handler
-            IRequestHandler handler = new RequestHandler();
-            handler.handleRequest(reader.readLine(), clientSocket);
+            IRequestHandler handler = new RequestHandler(clientSocket);
+            handler.processRequest(reader.readLine());
         }
         catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    // Close server and client sockets
     @Override
     public void stop() {
         try {

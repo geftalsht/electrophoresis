@@ -1,0 +1,10 @@
+.my-flexbox-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.dekar {
+    font-size: 32px;
+}

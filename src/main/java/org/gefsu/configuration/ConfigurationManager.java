@@ -1,4 +1,4 @@
-package org.gefsu;
+package org.gefsu.configuration;
 
 import org.yaml.snakeyaml.Yaml;
 import java.io.IOException;
@@ -15,7 +15,7 @@ public class ConfigurationManager implements IConfigurationManager {
 
         try (InputStream inputStream = this.getClass()
                              .getClassLoader()
-                             .getResourceAsStream("serverconfig.yml"))
+                             .getResourceAsStream("config/serverconfig.yml"))
         {
             serverConfiguration = yaml.load(inputStream);
         } catch (IOException e) {
