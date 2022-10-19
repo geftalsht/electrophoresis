@@ -29,6 +29,10 @@ public class RequestHandler {
         Pattern pattern = Pattern.compile("^\\w+");
         Matcher matcher = pattern.matcher(clientRequest);
 
-        return Optional.of((matcher.group().toUpperCase()));
+        if (matcher.find()) {
+            return Optional.of((matcher.group().toUpperCase()));
+        }
+
+        return Optional.empty();
     }
 }
