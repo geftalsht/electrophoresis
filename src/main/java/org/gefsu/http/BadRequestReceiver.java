@@ -6,9 +6,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-// Yes, I know about ISP. clientRequest is not a method, but
-// a field. I know an argument could be made that it should be
-// here, but oh well
 public class BadRequestReceiver extends Receiver {
 
     public BadRequestReceiver(Socket clientSocket, String clientRequest) {

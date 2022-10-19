@@ -1,4 +1,4 @@
-package org.gefsu.server;
+package org.gefsu;
 
 import lombok.AllArgsConstructor;
 import org.gefsu.http.GetReceiver;
@@ -9,12 +9,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @AllArgsConstructor
-public class RequestHandler implements IRequestHandler {
+public class RequestHandler {
 
     private Socket clientSocket;
 
     // Could be better
-    @Override
     public void processRequest(String clientRequest) {
         Receiver receiver;
         String httpVerb = extractHttpVerb(clientRequest);

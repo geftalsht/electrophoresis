@@ -63,6 +63,5 @@ public class GetReceiver extends Receiver {
         }
 
         return null;
-
     }
 }
