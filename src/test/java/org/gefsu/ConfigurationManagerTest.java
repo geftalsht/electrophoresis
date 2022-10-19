@@ -1,5 +1,6 @@
 package org.gefsu;
 
+import org.gefsu.configuration.ServerConfiguration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;
@@ -15,7 +16,7 @@ class ConfigurationManagerTest {
 
         InputStream inputStream = this.getClass()
                 .getClassLoader()
-                .getResourceAsStream("serverconfigPort8080.yml");
+                .getResourceAsStream("config/serverconfigPort8080.yml");
 
         ServerConfiguration serverConfiguration = yaml.load(inputStream);
 

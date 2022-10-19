@@ -1,13 +1,17 @@
 package org.gefsu;
 
+import org.gefsu.configuration.ConfigurationManager;
+import org.gefsu.configuration.IConfigurationManager;
+import org.gefsu.server.IServer;
+import org.gefsu.server.Server;
+
 public class App
 {
     public static void main(String[] args) {
 
         IConfigurationManager configurationManager = new ConfigurationManager();
-        ServerConfiguration serverConfiguration = configurationManager.loadServerConfiguration();
-        IElectrophoresisServer server = new ElectrophoresisServer();
+        IServer server = new Server();
 
-        server.start(serverConfiguration);
+        server.start(configurationManager.loadServerConfiguration());
     }
 }

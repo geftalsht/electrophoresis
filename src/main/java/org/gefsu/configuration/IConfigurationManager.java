@@ -1,6 +1,4 @@
-package org.gefsu;
-
-import java.io.IOException;
+package org.gefsu.configuration;
 
 public interface IConfigurationManager {
 
