@@ -43,12 +43,13 @@ public class GetRequestReceiver extends Receiver {
                         out.write("Content-Type: text/html; charset=utf-8\r\n");
                         out.write("\r\n");
                         out.write(
-                            "<html><head>\n" +
-                            "<title>404 Not Found</title>\n" +
-                            "</head><body>\n" +
-                            "<h1>Not Found</h1>\n" +
-                            "<p>The requested URL /cock was not found on this server.</p>\n" +
-                            "</body></html>"
+                            """
+                                <html><head>
+                                <title>404 Not Found</title>
+                                </head><body>
+                                <h1>Not Found</h1>
+                                <p>The requested URL was not found on this server.</p>
+                                </body></html>"""
                         );
                     } catch (IOException e) {
                         throw new RuntimeException(e);
