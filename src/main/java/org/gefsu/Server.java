@@ -11,13 +11,11 @@ public class Server {
     @SuppressWarnings("InfiniteLoopStatement")
     public void start(int port) {
 
-        try {
-            ServerSocket serverSocket = new ServerSocket(port);
-
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
             while (true)
                 listen(serverSocket);
-
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
