@@ -23,24 +23,23 @@ public class GetRequestReceiver extends Receiver {
             extractResourceNameFromGetRequest(clientRequest))
             .ifPresentOrElse(
                 x -> {
-                    try (BufferedReader bufferedReader = new BufferedReader(
+                    try (var in = new BufferedReader(
                         new InputStreamReader(x));
-                         BufferedWriter bufferedWriter = new BufferedWriter(
+                         var out = new BufferedWriter(
                              new OutputStreamWriter(clientSocket.getOutputStream()))) {
-                        bufferedWriter.write("HTTP/1.1 200 OK\r\n");
-                        bufferedWriter.write("Content-Type: text/html\r\n");
-                        bufferedWriter.write("\r\n");
-                        bufferedReader.transferTo(bufferedWriter);
+                        out.write("HTTP/1.1 200 OK\r\n");
+                        out.write("Content-Type: text/html\r\n");
+                        out.write("\r\n");
+                        in.transferTo(out);
                     }
                     catch (IOException e) {
                         throw new RuntimeException(e);
-                    }
-                    },
+                    }},
 
                 () -> {
-                    try (BufferedWriter bufferedWriter = new BufferedWriter(
+                    try (var out = new BufferedWriter(
                         new OutputStreamWriter(clientSocket.getOutputStream()))) {
-                        bufferedWriter.write("HTTP/1.1 404 Not Found\r\n");
+                        out.write("HTTP/1.1 404 Not Found\r\n");
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
