@@ -40,6 +40,16 @@ public class GetRequestReceiver extends Receiver {
                     try (var out = new BufferedWriter(
                         new OutputStreamWriter(clientSocket.getOutputStream()))) {
                         out.write("HTTP/1.1 404 Not Found\r\n");
+                        out.write("Content-Type: text/html; charset=utf-8\r\n");
+                        out.write("\r\n");
+                        out.write(
+                            "<html><head>\n" +
+                            "<title>404 Not Found</title>\n" +
+                            "</head><body>\n" +
+                            "<h1>Not Found</h1>\n" +
+                            "<p>The requested URL /cock was not found on this server.</p>\n" +
+                            "</body></html>"
+                        );
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
