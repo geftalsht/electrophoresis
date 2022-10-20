@@ -1,10 +1,6 @@
 package org.gefsu.http;
 
-import com.google.common.io.Resources;
-import java.io.*;
 import java.net.Socket;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
