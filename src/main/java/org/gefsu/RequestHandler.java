@@ -19,7 +19,6 @@ public class RequestHandler {
         if (httpVerb.isEmpty() || !httpVerb.get().equals("GET"))
             receiver = new BadRequestReceiver(clientSocket, clientRequest);
         else
-            // NOT IMPLEMENTED!
             receiver = new GetRequestReceiver(clientSocket, clientRequest);
 
         receiver.receive();
