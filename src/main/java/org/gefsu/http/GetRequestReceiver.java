@@ -62,6 +62,7 @@ public class GetRequestReceiver extends Receiver {
             return (matcher.group().toLowerCase());
         }
 
-        return null;
+    private boolean resourceExists(String fileName) {
+        return getClass().getResource(fileName) != null;
     }
 }
