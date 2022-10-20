@@ -52,15 +52,17 @@ public class GetRequestReceiver extends Receiver {
         }
     }
 
-    private String extractFileName(String clientRequest) {
+    private String extractResourceNameFromGetRequest(String clientRequest) {
 
         // Try to extract what resource is requested by GET
-        Pattern pattern = Pattern.compile("(?<=^GET\\s/)(\\S*)");
+        Pattern pattern = Pattern.compile("(?<=^GET\\s)(\\S*)");
         Matcher matcher = pattern.matcher(clientRequest);
 
-        if (matcher.find()) {
+        if (matcher.find())
             return (matcher.group().toLowerCase());
-        }
+
+        return "";
+    }
 
     private boolean resourceExists(String fileName) {
         return getClass().getResource(fileName) != null;
