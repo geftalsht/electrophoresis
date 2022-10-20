@@ -12,40 +12,7 @@ public class GetRequestReceiver extends Receiver {
 
     @Override
     public void receive() {
-
-        String fileName = extractFileName(clientRequest);
-
-        if (fileName == null) {
-            // 404 NOT FOUND
-            return;
-        }
-
-        // Read requested resource as a String
-        URL url = Resources.getResource(fileName);
-
-        try {
-            String content = Resources.toString(url, StandardCharsets.UTF_8);
-        } catch (IllegalArgumentException e) {
-
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Write the String to the Socket
-        try (PrintWriter writer = new PrintWriter(
-                new BufferedWriter(
-                        new OutputStreamWriter(clientSocket.getOutputStream()))))
-        {
-            writer.write("HTTP/1.1 200 OK\r\n");
-            writer.write("Content-Type: text/html; charset=UTF-8\r\n");
-            writer.write("Content length: " + content.toString().length() + "\r\n");
-            writer.write("\r\n");
-            writer.write(file.toString());
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        // NOT IMPLEMENTED!
     }
 
     private String extractFileName(String clientRequest) {
