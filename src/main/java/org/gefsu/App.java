@@ -9,7 +9,7 @@ public class App
             return;
         }
 
-        Server server = new Server();
+        var server = new Server();
         server.start(Integer.parseInt(args[0]));
     }
 }

@@ -3,8 +3,8 @@ package org.gefsu.http;
 import java.net.Socket;
 
 public abstract class Receiver {
-    protected Socket clientSocket;
-    protected String clientRequest;
+    protected final Socket clientSocket;
+    protected final String clientRequest;
 
     public Receiver(Socket clientSocket, String clientRequest) {
         this.clientSocket = clientSocket;
