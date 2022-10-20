@@ -13,19 +13,6 @@ public class GetRequestReceiver extends Receiver {
     @Override
     public void receive() {
 
-//        Write the String to the Socket
-//        try (var writer = new BufferedWriter(
-//                new OutputStreamWriter(clientSocket.getOutputStream())))
-//        {
-//            writer.write("HTTP/1.1 200 OK\r\n");
-//            writer.write("Content-Type: text/html; charset=UTF-8\r\n");
-//            writer.write("Content length: " + content.toString().length() + "\r\n");
-//            writer.write("\r\n");
-//            writer.write(file.toString());
-//        }
-//        catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     private String extractResourceNameFromGetRequest(String clientRequest) {
