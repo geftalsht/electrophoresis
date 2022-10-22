@@ -1,38 +1,51 @@
 package org.gefsu;
 
-import org.gefsu.http.GetRequestReceiver;
-import org.gefsu.http.Receiver;
-import org.gefsu.http.BadRequestReceiver;
-import java.net.Socket;
-import java.util.Optional;
-import java.util.regex.Matcher;
+import org.gefsu.http.BadRequestResponder;
+
+import java.io.*;
 import java.util.regex.Pattern;
 
 public class RequestHandler {
 
-    public void processRequest(Socket clientSocket, String clientRequest) {
+    public void handleClient(InputStream socketIn, OutputStream socketOut) {
+        try {
+            var clientRequest = readInputStreamToString(socketIn);
 
-        Receiver receiver;
-        Optional<String> httpVerb = extractHttpVerb(clientRequest);
+            if (!extractHttpVerbFromRequestString(clientRequest).equals("GET")) {
+                var responder = new BadRequestResponder();
+                responder.respond(socketOut);
+            }
+            else {
+                // FIXME NOT IMPLEMENTED
+                System.out.println("Hello, my frens!");
+            }
 
-        // If httpVerb is GET process it as a GET request.
-        if (httpVerb.isEmpty() || !httpVerb.get().equals("GET"))
-            receiver = new BadRequestReceiver(clientSocket, clientRequest);
-        else
-            receiver = new GetRequestReceiver(clientSocket, clientRequest);
-
-        receiver.receive();
+        } catch (IOException e) {
+            System.out.println("Error reading the socket input stream");
+            throw new RuntimeException(e);
+        }
     }
 
-    private Optional<String> extractHttpVerb(String clientRequest) {
+    private String readInputStreamToString(InputStream is)
+        throws IOException {
 
-        Pattern pattern = Pattern.compile("^\\w+");
-        Matcher matcher = pattern.matcher(clientRequest);
+        var result = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+
+        for (int len; (len = is.read(buffer)) != -1; ) {
+            result.write(buffer, 0, len);
+        }
+        return result.toString();
+    }
+
+    private String extractHttpVerbFromRequestString(String clientRequest) {
+        var pattern = Pattern.compile("^\\w+");
+        var matcher = pattern.matcher(clientRequest);
 
         if (matcher.find()) {
-            return Optional.of((matcher.group().toUpperCase()));
+            return matcher.group().toUpperCase();
         }
-
-        return Optional.empty();
+        return "";
     }
+
 }
