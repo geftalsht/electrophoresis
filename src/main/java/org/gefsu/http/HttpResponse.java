@@ -1,12 +1,14 @@
 package org.gefsu.http;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 public class HttpResponse {
     private final int statusCode;
     private final Map<String, List<String>> headers;
-    private final String body;
+    private final byte[] body;
 
     public HttpResponse(HttpResponseBuilderImpl builder) {
         this.statusCode = builder.statusCode;
@@ -14,17 +16,21 @@ public class HttpResponse {
         this.body = builder.body;
     }
 
-    @Override
-    public String toString() {
+    public byte[] toBytes() throws IOException {
+        var baos = new ByteArrayOutputStream();
 
-        return "HTTP/1.1" +
-            " " +
-            statusCode() +
-            " " +
-            statusMessage(statusCode) +
-            "\r\n" +
-            headers() +
-            body();
+        baos.write("HTTP/1.1".getBytes());
+        baos.write(" ".getBytes());
+        baos.write(statusCode().getBytes());
+        baos.write(" ".getBytes());
+        baos.write(statusMessage(statusCode).getBytes());
+        baos.write("\r\n".getBytes());
+        if (headers != null)
+            baos.write(headers().getBytes());
+        if (body != null)
+            baos.write(body);
+
+        return baos.toByteArray();
     }
 
     public interface Builder {
@@ -39,14 +45,14 @@ public class HttpResponse {
 
         Builder mimeType(MimeType mimeType);
 
-        Builder body(String body);
+        Builder body(byte[] body);
 
         HttpResponse build();
 
     }
 
-    private int statusCode() {
-        return statusCode;
+    private String statusCode() {
+        return Integer.toString(statusCode);
     }
 
     private String statusMessage(int statusCode) {
@@ -82,10 +88,6 @@ public class HttpResponse {
             });
 
         return sb.toString();
-    }
-
-    private String body() {
-        return body;
     }
 
 }

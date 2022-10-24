@@ -2,7 +2,6 @@ package org.gefsu.http;
 
 import java.io.*;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 public class GetRequestResponder implements RequestResponder {
@@ -23,7 +22,7 @@ public class GetRequestResponder implements RequestResponder {
                 HttpResponse response = new HttpResponseBuilderImpl()
                     .statusCode(404)
                     .build();
-                socketOut.write(response.toString().getBytes());
+                socketOut.write(response.toBytes());
                 return;
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -38,7 +37,7 @@ public class GetRequestResponder implements RequestResponder {
                     HttpResponse response = new HttpResponseBuilderImpl()
                         .statusCode(403)
                         .build();
-                    socketOut.write(response.toString().getBytes());
+                    socketOut.write(response.toBytes());
                     return;
                 }
 
@@ -50,7 +49,7 @@ public class GetRequestResponder implements RequestResponder {
                     .mimeType(mimeType)
                     .body(body)
                     .build();
-                socketOut.write(response.toString().getBytes());
+                socketOut.write(response.toBytes());
             }
 
         } catch (URISyntaxException | IOException e) {
@@ -83,7 +82,7 @@ public class GetRequestResponder implements RequestResponder {
             };
     }
 
-    private String readFileInputStream(FileInputStream fis)
+    private byte[] readFileInputStream(FileInputStream fis)
         throws IOException {
 
         var buffer = new ByteArrayOutputStream();
@@ -94,7 +93,7 @@ public class GetRequestResponder implements RequestResponder {
             buffer.write(data, 0, nRead);
         }
 
-        return buffer.toString(StandardCharsets.UTF_8);
+        return buffer.toByteArray();
     }
 
 }

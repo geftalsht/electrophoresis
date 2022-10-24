@@ -10,7 +10,7 @@ public class BadRequestResponder implements RequestResponder {
             HttpResponse response = new HttpResponseBuilderImpl()
                 .statusCode(400)
                 .build();
-            socketOut.write(response.toString().getBytes());
+            socketOut.write(response.toBytes());
         }
         catch (IOException e) {
             System.out.println("Error writing to the socket output stream");

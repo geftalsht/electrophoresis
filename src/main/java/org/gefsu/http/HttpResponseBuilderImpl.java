@@ -8,7 +8,7 @@ public class HttpResponseBuilderImpl implements HttpResponse.Builder {
 
     int statusCode;
     Map<String, List<String>> headers;
-    String body;
+    byte[] body;
 
     @Override
     public HttpResponse.Builder statusCode(int statusCode) {
@@ -56,7 +56,7 @@ public class HttpResponseBuilderImpl implements HttpResponse.Builder {
     }
 
     @Override
-    public HttpResponse.Builder body(String body) {
+    public HttpResponse.Builder body(byte[] body) {
         this.body = body;
         return this;
     }
