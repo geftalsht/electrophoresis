@@ -9,7 +9,8 @@ public class GetRequestResponder implements RequestResponder {
     @Override
     public void respond(String clientRequest, OutputStream socketOut) {
 
-        var fileName = extractFileNameFromRequest(clientRequest);
+        var fileName
+            = returnFirstRegexpMatch(clientRequest, "(?<=^GET\\s)(\\S*)");
 
         try (var writer = new BufferedWriter(
             new OutputStreamWriter(socketOut))) {
@@ -21,7 +22,9 @@ public class GetRequestResponder implements RequestResponder {
                 writer.write(response.toString());
             }
             else {
-                System.out.println("NOT IMPLEMENTED");
+                var mimeType
+                    = determineMimeTypeFromExtension(
+                        returnFirstRegexpMatch(fileName, "(?<=\\.)(\\S*)"));
             }
 
         } catch (IOException e) {
@@ -29,9 +32,9 @@ public class GetRequestResponder implements RequestResponder {
         }
     }
 
-    private String extractFileNameFromRequest(String clientRequest) {
-        var pattern = Pattern.compile("(?<=^GET\\s)(\\S*)");
-        var matcher = pattern.matcher(clientRequest);
+    private String returnFirstRegexpMatch(String input, String regex) {
+        var pattern = Pattern.compile(regex);
+        var matcher = pattern.matcher(input);
 
         if (matcher.find())
             return matcher.group();
@@ -39,7 +42,7 @@ public class GetRequestResponder implements RequestResponder {
         return "";
     }
 
-    public boolean resourceExistsAndIsNotDirectory(String fileName) {
+    private boolean resourceExistsAndIsNotDirectory(String fileName) {
 
         var url = getClass().getResource(fileName);
 
@@ -55,6 +58,20 @@ public class GetRequestResponder implements RequestResponder {
         }
 
         return true;
+    }
+
+    private MimeType determineMimeTypeFromExtension(String fileExtension) {
+        return
+            switch (fileExtension) {
+                case "txt" -> MimeType.PLAINTEXT;
+                case "htm", "html" -> MimeType.HTML;
+                case "css" -> MimeType.CSS;
+                case "js" -> MimeType.JS;
+                case "json" -> MimeType.JSON;
+                case "jpg", "jpeg" -> MimeType.JPEG;
+                case "png" -> MimeType.PNG;
+                default -> MimeType.BINARY;
+            };
     }
 
 }
