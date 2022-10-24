@@ -36,6 +36,7 @@ public class RequestHandler {
         var result = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
 
+        // FIXME THIS WILL BLOCK THE THREAD!!!
         for (int len; (len = is.read(buffer)) != -1; ) {
             result.write(buffer, 0, len);
         }
