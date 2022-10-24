@@ -8,23 +8,25 @@ public class HttpResponse<T> {
     private Map<String, List<String>> headers;
     private T body;
 
-    public <T> HttpResponse(HttpResponseBuilderImpl httpResponseBuilder) {
-
+    public HttpResponse(HttpResponseBuilderImpl<T> builder) {
+        this.statusCode = builder.statusCode;
+        this.headers = builder.headers;
+        this.body = builder.body;
     }
 
     public interface Builder<T> {
 
-        public Builder<?> statusCode(int statusCode);
+        public Builder<T> statusCode(int statusCode);
 
-        public Builder<?> headers(Map<String, List<String>> headers);
+        public Builder<T> headers(Map<String, List<String>> headers);
 
-        public Builder<?> header(String key, List<String> values);
+        public Builder<T> header(String key, List<String> values);
 
-        public Builder<?> header(String key, String value);
+        public Builder<T> header(String key, String value);
 
         public Builder<T> body(T body);
 
-        public HttpResponse<?> build();
+        public HttpResponse<T> build();
 
     }
 
