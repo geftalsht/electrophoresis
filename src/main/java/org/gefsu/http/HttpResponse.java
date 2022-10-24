@@ -3,12 +3,12 @@ package org.gefsu.http;
 import java.util.List;
 import java.util.Map;
 
-public class HttpResponse<T> {
+public class HttpResponse {
     private final int statusCode;
     private final Map<String, List<String>> headers;
-    private final T body;
+    private final String body;
 
-    public HttpResponse(HttpResponseBuilderImpl<T> builder) {
+    public HttpResponse(HttpResponseBuilderImpl builder) {
         this.statusCode = builder.statusCode;
         this.headers = builder.headers;
         this.body = builder.body;
@@ -27,19 +27,21 @@ public class HttpResponse<T> {
             body();
     }
 
-    public interface Builder<T> {
+    public interface Builder {
 
-        Builder<T> statusCode(int statusCode);
+        Builder statusCode(int statusCode);
 
-        Builder<T> headers(Map<String, List<String>> headers);
+        Builder headers(Map<String, List<String>> headers);
 
-        Builder<T> header(String key, List<String> values);
+        Builder header(String key, List<String> values);
 
-        Builder<T> header(String key, String value);
+        Builder header(String key, String value);
 
-        Builder<T> body(T body);
+        Builder mimeType(MimeType mimeType);
 
-        HttpResponse<T> build();
+        Builder body(String body);
+
+        HttpResponse build();
 
     }
 
@@ -83,11 +85,7 @@ public class HttpResponse<T> {
     }
 
     private String body() {
-
-        if (body == null)
-            return "";
-
-        return body.toString();
+        return body;
     }
 
 }

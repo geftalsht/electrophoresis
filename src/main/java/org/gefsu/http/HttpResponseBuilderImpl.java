@@ -4,51 +4,66 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HttpResponseBuilderImpl<T> implements HttpResponse.Builder<T> {
+public class HttpResponseBuilderImpl implements HttpResponse.Builder {
 
     int statusCode;
     Map<String, List<String>> headers;
-    T body;
+    String body;
 
     @Override
-    public HttpResponse.Builder<T> statusCode(int statusCode) {
+    public HttpResponse.Builder statusCode(int statusCode) {
         this.statusCode = statusCode;
         return this;
     }
 
     @Override
-    public HttpResponse.Builder<T> headers(Map<String, List<String>> headers) {
+    public HttpResponse.Builder headers(Map<String, List<String>> headers) {
         if (headers == null)
             headers = new HashMap<>();
+
         this.headers.putAll(headers);
         return this;
     }
 
     @Override
-    public HttpResponse.Builder<T> header(String key, List<String> values) {
+    public HttpResponse.Builder header(String key, List<String> values) {
         if (headers == null)
             headers = new HashMap<>();
+
         this.headers.put(key, values);
         return this;
     }
 
     @Override
-    public HttpResponse.Builder<T> header(String key, String value) {
+    public HttpResponse.Builder header(String key, String value) {
         if (headers == null)
             headers = new HashMap<>();
+
         headers.put(key, List.of(value));
         return this;
     }
 
     @Override
-    public HttpResponse.Builder<T> body(T body) {
+    public HttpResponse.Builder mimeType(MimeType mimeType) {
+        if (headers != null && headers.containsKey("Content-Key"))
+            headers.replace("Content-Key", List.of(mimeType.toString()));
+
+        if (headers == null)
+            headers = new HashMap<>();
+
+        headers.put("Content-Type", List.of(mimeType.toString()));
+        return this;
+    }
+
+    @Override
+    public HttpResponse.Builder body(String body) {
         this.body = body;
         return this;
     }
 
     @Override
-    public HttpResponse<T> build() {
-        return new HttpResponse<>(this);
+    public HttpResponse build() {
+        return new HttpResponse(this);
     }
 
 }

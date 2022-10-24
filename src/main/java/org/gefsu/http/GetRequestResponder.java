@@ -2,6 +2,7 @@ package org.gefsu.http;
 
 import java.io.*;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 public class GetRequestResponder implements RequestResponder {
@@ -11,25 +12,51 @@ public class GetRequestResponder implements RequestResponder {
 
         var fileName
             = returnFirstRegexpMatch(clientRequest, "(?<=^GET\\s)(\\S*)");
+        var mimeType
+            = determineMimeTypeFromExtension(
+            returnFirstRegexpMatch(fileName, "(?<=\\.)(\\S*)"));
+        var fileUrl = getClass().getResource(fileName);
 
-        try (var writer = new BufferedWriter(
-            new OutputStreamWriter(socketOut))) {
-
-            if (!resourceExistsAndIsNotDirectory(fileName)) {
-                HttpResponse<String> response = new HttpResponseBuilderImpl<String>()
+        // If path to resource is completely invalid, throw a 404
+        if (fileUrl == null) {
+            try {
+                HttpResponse response = new HttpResponseBuilderImpl()
                     .statusCode(404)
                     .build();
-                writer.write(response.toString());
+                socketOut.write(response.toString().getBytes());
+                return;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            else {
-                var mimeType
-                    = determineMimeTypeFromExtension(
-                        returnFirstRegexpMatch(fileName, "(?<=\\.)(\\S*)"));
+        }
+
+        try {
+            var file = new File(fileUrl.toURI());
+
+            // If requested resource is a directory, throw a 403
+            if (file.isDirectory()) {
+                    HttpResponse response = new HttpResponseBuilderImpl()
+                        .statusCode(403)
+                        .build();
+                    socketOut.write(response.toString().getBytes());
+                    return;
+                }
+
+            // If everything seems alright, send it with a 200
+            try (var fis = new FileInputStream(file)) {
+                var body = readFileInputStream(fis);
+                HttpResponse response = new HttpResponseBuilderImpl()
+                    .statusCode(200)
+                    .mimeType(mimeType)
+                    .body(body)
+                    .build();
+                socketOut.write(response.toString().getBytes());
             }
 
-        } catch (IOException e) {
+        } catch (URISyntaxException | IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     private String returnFirstRegexpMatch(String input, String regex) {
@@ -40,24 +67,6 @@ public class GetRequestResponder implements RequestResponder {
             return matcher.group();
 
         return "";
-    }
-
-    private boolean resourceExistsAndIsNotDirectory(String fileName) {
-
-        var url = getClass().getResource(fileName);
-
-        if (url == null)
-            return false;
-
-        try {
-            var file = new File(url.toURI());
-            if (file.isDirectory())
-                return false;
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-
-        return true;
     }
 
     private MimeType determineMimeTypeFromExtension(String fileExtension) {
@@ -72,6 +81,20 @@ public class GetRequestResponder implements RequestResponder {
                 case "png" -> MimeType.PNG;
                 default -> MimeType.BINARY;
             };
+    }
+
+    private String readFileInputStream(FileInputStream fis)
+        throws IOException {
+
+        var buffer = new ByteArrayOutputStream();
+        int nRead;
+        byte[] data = new byte[1024];
+
+        while ((nRead = fis.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
+        }
+
+        return buffer.toString(StandardCharsets.UTF_8);
     }
 
 }

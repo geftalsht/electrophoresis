@@ -1,19 +1,16 @@
 package org.gefsu.http;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 
 public class BadRequestResponder implements RequestResponder {
     @Override
     public void respond(String clientRequest, OutputStream socketOut) {
-        try (var writer = new BufferedWriter(
-            new OutputStreamWriter(socketOut))) {
-            HttpResponse<String> response = new HttpResponseBuilderImpl<String>()
+        try  {
+            HttpResponse response = new HttpResponseBuilderImpl()
                 .statusCode(400)
                 .build();
-            writer.write(response.toString());
+            socketOut.write(response.toString().getBytes());
         }
         catch (IOException e) {
             System.out.println("Error writing to the socket output stream");
