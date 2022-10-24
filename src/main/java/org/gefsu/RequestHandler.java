@@ -1,24 +1,28 @@
 package org.gefsu;
 
 import org.gefsu.http.BadRequestResponder;
-
-import java.io.*;
+import org.gefsu.http.GetRequestResponder;
+import org.gefsu.http.RequestResponder;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.regex.Pattern;
 
 public class RequestHandler {
 
     public void handleClient(InputStream socketIn, OutputStream socketOut) {
         try {
+
+            RequestResponder responder;
             var clientRequest = readInputStreamToString(socketIn);
 
-            if (!extractHttpVerbFromRequestString(clientRequest).equals("GET")) {
-                var responder = new BadRequestResponder();
-                responder.respond(socketOut);
-            }
-            else {
-                // FIXME NOT IMPLEMENTED
-                System.out.println("Hello, my frens!");
-            }
+            if (!extractHttpVerbFromRequestString(clientRequest).equals("GET"))
+                responder = new BadRequestResponder();
+            else
+                responder = new GetRequestResponder();
+
+            responder.respond(clientRequest, socketOut);
 
         } catch (IOException e) {
             System.out.println("Error reading the socket input stream");

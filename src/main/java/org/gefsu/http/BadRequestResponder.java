@@ -5,8 +5,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
-public class BadRequestResponder {
-    public void respond(OutputStream socketOut) {
+public class BadRequestResponder implements RequestResponder {
+    @Override
+    public void respond(String clientRequest, OutputStream socketOut) {
         try (var writer = new BufferedWriter(
             new OutputStreamWriter(socketOut))) {
             HttpResponse<String> response = new HttpResponseBuilderImpl<String>()

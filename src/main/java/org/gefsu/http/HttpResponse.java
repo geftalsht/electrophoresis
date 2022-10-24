@@ -17,7 +17,7 @@ public class HttpResponse<T> {
     @Override
     public String toString() {
 
-        return version() +
+        return "HTTP/1.1" +
             " " +
             statusCode() +
             " " +
@@ -29,22 +29,18 @@ public class HttpResponse<T> {
 
     public interface Builder<T> {
 
-        public Builder<T> statusCode(int statusCode);
+        Builder<T> statusCode(int statusCode);
 
-        public Builder<T> headers(Map<String, List<String>> headers);
+        Builder<T> headers(Map<String, List<String>> headers);
 
-        public Builder<T> header(String key, List<String> values);
+        Builder<T> header(String key, List<String> values);
 
-        public Builder<T> header(String key, String value);
+        Builder<T> header(String key, String value);
 
-        public Builder<T> body(T body);
+        Builder<T> body(T body);
 
-        public HttpResponse<T> build();
+        HttpResponse<T> build();
 
-    }
-
-    private String version() {
-        return "HTTP/1.1";
     }
 
     private int statusCode() {
