@@ -1,5 +1,6 @@
 package org.gefsu.http;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,18 +18,24 @@ public class HttpResponseBuilderImpl<T> implements HttpResponse.Builder<T> {
 
     @Override
     public HttpResponse.Builder<T> headers(Map<String, List<String>> headers) {
+        if (headers == null)
+            headers = new HashMap<>();
         this.headers.putAll(headers);
         return this;
     }
 
     @Override
     public HttpResponse.Builder<T> header(String key, List<String> values) {
+        if (headers == null)
+            headers = new HashMap<>();
         this.headers.put(key, values);
         return this;
     }
 
     @Override
     public HttpResponse.Builder<T> header(String key, String value) {
+        if (headers == null)
+            headers = new HashMap<>();
         headers.put(key, List.of(value));
         return this;
     }
