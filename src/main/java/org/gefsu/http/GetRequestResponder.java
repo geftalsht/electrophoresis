@@ -9,10 +9,8 @@ public class GetRequestResponder implements RequestResponder {
     @Override
     public void respond(String clientRequest, OutputStream socketOut) {
 
-        System.out.println("4");
         var fileName = extractFileNameFromRequest(clientRequest);
 
-        System.out.println("5");
         try (var writer = new BufferedWriter(
             new OutputStreamWriter(socketOut))) {
 
@@ -20,7 +18,6 @@ public class GetRequestResponder implements RequestResponder {
                 HttpResponse<String> response = new HttpResponseBuilderImpl<String>()
                     .statusCode(404)
                     .build();
-                System.out.println("6");
                 writer.write(response.toString());
             }
             else {
