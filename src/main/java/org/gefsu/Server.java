@@ -1,8 +1,6 @@
 package org.gefsu;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 
 public class Server {
@@ -24,11 +22,11 @@ public class Server {
 
         // Create a clientSocket object
         try (var clientSocket = serverSocket.accept();
-             var reader = new BufferedReader(
-                     new InputStreamReader(clientSocket.getInputStream())))
+             var socketIn = clientSocket.getInputStream();
+             var socketOut = clientSocket.getOutputStream())
         {
             RequestHandler handler = new RequestHandler();
-            handler.processRequest(clientSocket, reader.readLine());
+            handler.handleClient(socketIn, socketOut);
         }
     }
 }

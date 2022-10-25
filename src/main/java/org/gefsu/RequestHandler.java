@@ -1,38 +1,56 @@
 package org.gefsu;
 
-import org.gefsu.http.GetRequestReceiver;
-import org.gefsu.http.Receiver;
-import org.gefsu.http.BadRequestReceiver;
-import java.net.Socket;
-import java.util.Optional;
-import java.util.regex.Matcher;
+import org.gefsu.http.BadRequestResponder;
+import org.gefsu.http.GetRequestResponder;
+import org.gefsu.http.RequestResponder;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.regex.Pattern;
 
 public class RequestHandler {
 
-    public void processRequest(Socket clientSocket, String clientRequest) {
+    public void handleClient(InputStream socketIn, OutputStream socketOut) {
+        try {
 
-        Receiver receiver;
-        Optional<String> httpVerb = extractHttpVerb(clientRequest);
+            RequestResponder responder;
+            var clientRequest = readInputStreamToString(socketIn);
 
-        // If httpVerb is GET process it as a GET request.
-        if (httpVerb.isEmpty() || !httpVerb.get().equals("GET"))
-            receiver = new BadRequestReceiver(clientSocket, clientRequest);
-        else
-            receiver = new GetRequestReceiver(clientSocket, clientRequest);
+            if (!extractHttpVerbFromRequestString(clientRequest).equals("GET"))
+                responder = new BadRequestResponder();
+            else
+                responder = new GetRequestResponder();
 
-        receiver.receive();
+            responder.respond(clientRequest, socketOut);
+
+        } catch (IOException e) {
+            System.out.println("Error reading the socket input stream");
+            throw new RuntimeException(e);
+        }
     }
 
-    private Optional<String> extractHttpVerb(String clientRequest) {
+    private String readInputStreamToString(InputStream is)
+        throws IOException {
 
-        Pattern pattern = Pattern.compile("^\\w+");
-        Matcher matcher = pattern.matcher(clientRequest);
+        var result = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+
+        while (is.available() != 0) {
+            int len = is.read(buffer);
+            result.write(buffer, 0, len);
+        }
+        return result.toString();
+    }
+
+    private String extractHttpVerbFromRequestString(String clientRequest) {
+        var pattern = Pattern.compile("^\\w+");
+        var matcher = pattern.matcher(clientRequest);
 
         if (matcher.find()) {
-            return Optional.of((matcher.group().toUpperCase()));
+            return matcher.group().toUpperCase();
         }
-
-        return Optional.empty();
+        return "";
     }
+
 }

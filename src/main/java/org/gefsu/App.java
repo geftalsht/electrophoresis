@@ -1,7 +1,6 @@
 package org.gefsu;
 
-public class App
-{
+public class App {
     public static void main(String[] args) {
 
         if (1 > args.length) {
