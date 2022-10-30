@@ -26,6 +26,7 @@ public class HttpResponse {
         HttpResponse build();
     }
 
+    // I'm not proud of this, but hey
     public byte[] toBytes() throws IOException {
 
         var baos = new ByteArrayOutputStream();
@@ -48,6 +49,7 @@ public class HttpResponse {
         return Integer.toString(statusCode);
     }
 
+    // Not proud of this as well
     private String statusMessage(int statusCode) {
         return (
             switch (statusCode) {
@@ -55,6 +57,7 @@ public class HttpResponse {
                 case 400 -> "Bad Request";
                 case 403 -> "Forbidden";
                 case 404 -> "Not Found";
+                case 405 -> "Method Not Allowed";
                 default -> "";
             });
     }

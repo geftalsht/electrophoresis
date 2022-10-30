@@ -7,7 +7,13 @@ public class BadRequestResponder {
 
     public static void respond(OutputStream socketOut)
         throws IOException {
-        // FIXME Not implemented
+        var builder = new HttpResponseBuilderImpl();
+        var director = new HttpResponseDirector();
+
+        director.buildBadResponse(builder);
+        var response = builder.build();
+
+        socketOut.write(response.toBytes());
     }
 
 }
