@@ -10,10 +10,20 @@ public class HttpResponse {
     private final Map<String, List<String>> headers;
     private final byte[] body;
 
-    public HttpResponse(HttpResponseBuilderImpl builder) {
-        this.statusCode = builder.statusCode;
-        this.headers = builder.headers;
-        this.body = builder.body;
+    public HttpResponse(int statusCode, Map<String, List<String>> headers, byte[] body) {
+        this.statusCode = statusCode;
+        this.headers = headers;
+        this.body = body;
+    }
+
+    public interface Builder {
+        void setStatusCode(int statusCode);
+        void addHeaders(Map<String, List<String>> headers);
+        void addHeader(String key, List<String> values);
+        void addHeader(String key, String value);
+        void setMimeType(String ekse);
+        void setBody(byte[] body);
+        HttpResponse build();
     }
 
     public byte[] toBytes() throws IOException {
@@ -32,24 +42,6 @@ public class HttpResponse {
             baos.write(body);
 
         return baos.toByteArray();
-    }
-
-    public interface Builder {
-
-        Builder statusCode(int statusCode);
-
-        Builder headers(Map<String, List<String>> headers);
-
-        Builder header(String key, List<String> values);
-
-        Builder header(String key, String value);
-
-        Builder mimeType(MimeType mimeType);
-
-        Builder body(byte[] body);
-
-        HttpResponse build();
-
     }
 
     private String statusCode() {
