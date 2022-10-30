@@ -1,7 +1,6 @@
 package org.gefsu.http.response;
 
 import org.gefsu.http.request.HttpRequest;
-
 import java.io.IOException;
 import java.io.OutputStream;
 
