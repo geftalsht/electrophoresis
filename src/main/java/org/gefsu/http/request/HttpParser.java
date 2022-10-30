@@ -83,7 +83,7 @@ public class HttpParser {
             var firstSpace = startLine.indexOf(' ');
             var lastSpace = startLine.lastIndexOf(' ');
 
-            return startLine.substring(firstSpace + 1, lastSpace);
+            return startLine.substring(firstSpace+1, lastSpace);
 
         } catch (IndexOutOfBoundsException e) {
             throw new BadRequestException();
