@@ -13,7 +13,6 @@ public class App {
             .ifPresentOrElse(
                 Server::start,
                 () -> System.out.println("Pass a port number as an argument!"));
-
     }
 
     private static Optional<Integer> safeParseInt(String s) {
