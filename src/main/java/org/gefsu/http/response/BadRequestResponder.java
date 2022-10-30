@@ -1,4 +1,4 @@
-package org.gefsu.http;
+package org.gefsu.http.response;
 
 import java.io.IOException;
 import java.io.OutputStream;

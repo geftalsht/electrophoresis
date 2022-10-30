@@ -1,4 +1,4 @@
-package org.gefsu.http;
+package org.gefsu.http.response;
 
 public enum MimeType {
     PLAINTEXT, HTML, CSS, JS, JSON, JPEG, PNG, BINARY;

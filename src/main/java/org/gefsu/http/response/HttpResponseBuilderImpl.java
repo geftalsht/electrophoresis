@@ -1,4 +1,4 @@
-package org.gefsu.http;
+package org.gefsu.http.response;
 
 import java.util.HashMap;
 import java.util.List;

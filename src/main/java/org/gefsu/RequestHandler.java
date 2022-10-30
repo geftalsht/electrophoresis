@@ -1,6 +1,10 @@
 package org.gefsu;
 
-import org.gefsu.http.*;
+import org.gefsu.http.exception.BadRequestException;
+import org.gefsu.http.request.HttpMethod;
+import org.gefsu.http.request.HttpParser;
+import org.gefsu.http.response.BadRequestResponder;
+import org.gefsu.http.response.Responder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +18,7 @@ public class RequestHandler {
 
     static {
         Map<HttpMethod, Responder> map = new HashMap<>();
-        map.put(HttpMethod.GET, )
+        map.put(HttpMethod.GET, );
     }
 
     public static void handleClient(InputStream socketIn, OutputStream socketOut)
