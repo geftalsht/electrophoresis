@@ -1,7 +1,6 @@
 package org.gefsu.http.request;
 
 import org.gefsu.http.exception.BadRequestException;
-
 import java.io.IOException;
 import java.io.InputStream;
 
