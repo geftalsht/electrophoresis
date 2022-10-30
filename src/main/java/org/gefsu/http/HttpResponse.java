@@ -17,6 +17,7 @@ public class HttpResponse {
     }
 
     public byte[] toBytes() throws IOException {
+
         var baos = new ByteArrayOutputStream();
 
         baos.write("HTTP/1.1".getBytes());

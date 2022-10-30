@@ -1,5 +1,5 @@
 package org.gefsu.http;
 
-public enum ScuffedHttpMethod {
+public enum HttpMethod {
     GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE
 }

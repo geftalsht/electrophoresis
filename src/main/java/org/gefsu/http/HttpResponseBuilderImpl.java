@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HttpResponseBuilderImpl implements HttpResponse.Builder {
+public class HttpResponseBuilderImpl
+    implements HttpResponse.Builder {
 
     int statusCode;
     Map<String, List<String>> headers;

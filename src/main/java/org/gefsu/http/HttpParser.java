@@ -6,9 +6,9 @@ import java.io.InputStream;
 // Scuffed HTTP Parser 0.1.0
 // At this moment it only parses the start line of an HTTP message
 // and ignores everything else (every header and body)
-public class ScuffedHttpParser {
+public class HttpParser {
 
-    public static ScuffedHttpRequest parseRequest(InputStream is)
+    public static HttpRequest parseRequest(InputStream is)
         throws IOException, BadRequestException {
 
         var startLine = parseStartLine(is);
@@ -16,7 +16,7 @@ public class ScuffedHttpParser {
         var method = parseMethod(startLine);
         var resource = parseResource(startLine);
 
-        return new ScuffedHttpRequest(method, resource);
+        return new HttpRequest(method, resource);
 
     }
 
@@ -52,21 +52,21 @@ public class ScuffedHttpParser {
         return (c >= 0x28 && c <= 0x7D) || c == 0x20;
     }
 
-    private static ScuffedHttpMethod parseMethod(String startLine)
+    private static HttpMethod parseMethod(String startLine)
         throws BadRequestException {
 
         try {
             var firstSpace = startLine.indexOf(' ');
 
             return switch (startLine.substring(0, firstSpace)) {
-                case "GET" -> ScuffedHttpMethod.GET;
-                case "HEAD" -> ScuffedHttpMethod.HEAD;
-                case "POST" -> ScuffedHttpMethod.POST;
-                case "PUT" -> ScuffedHttpMethod.PUT;
-                case "DELETE" -> ScuffedHttpMethod.DELETE;
-                case "CONNECT" -> ScuffedHttpMethod.CONNECT;
-                case "OPTIONS" -> ScuffedHttpMethod.OPTIONS;
-                case "TRACE" -> ScuffedHttpMethod.TRACE;
+                case "GET" -> HttpMethod.GET;
+                case "HEAD" -> HttpMethod.HEAD;
+                case "POST" -> HttpMethod.POST;
+                case "PUT" -> HttpMethod.PUT;
+                case "DELETE" -> HttpMethod.DELETE;
+                case "CONNECT" -> HttpMethod.CONNECT;
+                case "OPTIONS" -> HttpMethod.OPTIONS;
+                case "TRACE" -> HttpMethod.TRACE;
                 default -> throw new BadRequestException();
             };
         } catch (IndexOutOfBoundsException e) {

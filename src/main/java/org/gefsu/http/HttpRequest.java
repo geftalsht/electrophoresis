@@ -1,16 +1,16 @@
 package org.gefsu.http;
 
-public class ScuffedHttpRequest {
+public class HttpRequest {
 
-    private final ScuffedHttpMethod method;
+    private final HttpMethod method;
     private final String resource;
 
-    ScuffedHttpRequest(ScuffedHttpMethod method, String resource) {
+    HttpRequest(HttpMethod method, String resource) {
         this.method = method;
         this.resource = resource;
     }
 
-    public ScuffedHttpMethod getMethod() {
+    public HttpMethod getMethod() {
         return method;
     }
 
