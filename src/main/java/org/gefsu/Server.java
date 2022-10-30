@@ -25,8 +25,7 @@ public class Server {
              var socketIn = clientSocket.getInputStream();
              var socketOut = clientSocket.getOutputStream())
         {
-            RequestHandler handler = new RequestHandler();
-            handler.handleClient(socketIn, socketOut);
+            RequestHandler.handleClient(socketIn, socketOut);
         }
     }
 }
