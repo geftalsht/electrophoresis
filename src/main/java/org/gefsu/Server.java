@@ -15,6 +15,7 @@ public class Server {
         catch (IOException e) {
             System.out.println("Fatal I/O Error!");
         }
+
     }
 
     private static void listen(ServerSocket serverSocket)
@@ -25,7 +26,8 @@ public class Server {
              var socketIn = clientSocket.getInputStream();
              var socketOut = clientSocket.getOutputStream())
         {
-            RequestHandler.handleClient(socketIn, socketOut);
+            new RequestHandler(socketIn, socketOut).handleClient();
         }
     }
+
 }
