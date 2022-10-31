@@ -24,7 +24,7 @@ public class RequestHandler {
         try {
             command = createCommand(HttpParser.parseRequest(socketIn));
         } catch (BadRequestException e) {
-            command = new BadCommand(socketOut);
+            command = new SimpleCommand(socketOut, 400);
         }
         command.execute();
 
@@ -35,7 +35,7 @@ public class RequestHandler {
         if (request.getMethod() == HttpMethod.GET)
             return new GetResourceCommand(socketOut, request.getResource());
 
-        return new NotAllowedCommand(socketOut);
+        return new SimpleCommand(socketOut, 405);
     }
 
 }

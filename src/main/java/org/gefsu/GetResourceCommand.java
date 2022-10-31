@@ -22,9 +22,9 @@ public class GetResourceCommand implements Command {
         try {
             receiver.getResource(resourceName, socketOut);
         } catch (NotFoundException e) {
-            receiver.notFoundRespond(socketOut);
+            receiver.simpleRespond(socketOut, 404);
         } catch (ForbiddenException e) {
-            receiver.forbiddenRespond(socketOut);
+            receiver.simpleRespond(socketOut, 403);
         }
     }
 

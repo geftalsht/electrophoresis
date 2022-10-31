@@ -54,46 +54,6 @@ public class RequestReceiver {
 
     }
 
-    public void notAllowedRespond(OutputStream respondTo)
-        throws IOException {
-
-        var responseBuilder = new HttpResponseMetaBuilder();
-        responseBuilder.setStatusCode(405);
-
-        var response = responseBuilder.build();
-        respondTo.write(response.metaToBytes());
-    }
-
-    public void badRespond(OutputStream respondTo)
-        throws IOException {
-
-        var responseBuilder = new HttpResponseMetaBuilder();
-        responseBuilder.setStatusCode(400);
-
-        var response = responseBuilder.build();
-        respondTo.write(response.metaToBytes());
-    }
-
-    public void notFoundRespond(OutputStream respondTo)
-        throws IOException {
-
-        var responseBuilder = new HttpResponseMetaBuilder();
-        responseBuilder.setStatusCode(404);
-
-        var response = responseBuilder.build();
-        respondTo.write(response.metaToBytes());
-    }
-
-    public void forbiddenRespond(OutputStream respondTo)
-        throws IOException {
-
-        var responseBuilder = new HttpResponseMetaBuilder();
-        responseBuilder.setStatusCode(403);
-
-        var response = responseBuilder.build();
-        respondTo.write(response.metaToBytes());
-    }
-
     private String determineFileExtension(String fileName) {
 
         var dot = fileName.lastIndexOf('.');
@@ -102,6 +62,16 @@ public class RequestReceiver {
             return fileName.substring(dot+1);
 
         return "binary";
+    }
+
+    public void simpleRespond(OutputStream respondTo, int statusCode)
+        throws IOException {
+
+        var responseBuilder = new HttpResponseMetaBuilder();
+        responseBuilder.setStatusCode(statusCode);
+
+        var response = responseBuilder.build();
+        respondTo.write(response.metaToBytes());
     }
 
 }
