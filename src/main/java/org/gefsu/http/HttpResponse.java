@@ -28,6 +28,8 @@ public class HttpResponse<T> {
 
         void addHeader(String key, String  value);
 
+        void setMimeType(String mimeType);
+
         void setBody(T body);
 
         HttpResponse<T> build();

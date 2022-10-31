@@ -1,5 +1,6 @@
 package org.gefsu;
 
+import org.gefsu.http.exception.NotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -17,7 +18,11 @@ public class GetResourceCommand implements Command {
 
     @Override
     public void execute() throws IOException {
-        receiver.getResource(resourceName, socketOut);
+        try {
+            receiver.getResource(resourceName, socketOut);
+        } catch (NotFoundException e) {
+            receiver.notFoundRespond(socketOut);
+        }
     }
 
 }

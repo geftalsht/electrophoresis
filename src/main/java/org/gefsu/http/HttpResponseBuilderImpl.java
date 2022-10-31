@@ -30,6 +30,11 @@ public class HttpResponseBuilderImpl<T> implements HttpResponse.Builder<T> {
     }
 
     @Override
+    public void setMimeType(String mimeType) {
+        addHeader("Content-Type", mimeType);
+    }
+
+    @Override
     public void setBody(T body) {
 
     }
