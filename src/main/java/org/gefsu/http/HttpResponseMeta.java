@@ -4,36 +4,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
-public class HttpResponse<T> {
+public class HttpResponseMeta {
 
     final int responseCode;
     final Map<String, List<String>> headers;
 
-    // byte[], String, Path, FileInputStream?
-    final T body;
-
-    HttpResponse(int responseCode, Map<String, List<String>> headers, T body) {
+    HttpResponseMeta(int responseCode, Map<String, List<String>> headers) {
         this.responseCode = responseCode;
         this.headers = headers;
-        this.body = body;
-    }
-
-    public interface Builder<T> {
-
-        void setStatusCode(int statusCode);
-
-        void setHeaders(Map<String, List<String>> headers);
-
-        void addHeader(String key, List<String> value);
-
-        void addHeader(String key, String  value);
-
-        void setMimeType(String mimeType);
-
-        void setBody(T body);
-
-        HttpResponse<T> build();
-
     }
 
     private String metaToString() {

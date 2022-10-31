@@ -1,6 +1,6 @@
 package org.gefsu;
 
-import org.gefsu.http.HttpResponseBuilderImpl;
+import org.gefsu.http.HttpResponseMetaBuilder;
 import org.gefsu.http.exception.ForbiddenException;
 import org.gefsu.http.exception.NotFoundException;
 import java.io.File;
@@ -13,7 +13,7 @@ import java.util.Properties;
 
 public class RequestReceiver {
 
-    Properties properties = new Properties();
+    final Properties properties = new Properties();
 
     public void getResource(String resourceName, OutputStream respondTo)
         throws IOException, NotFoundException, ForbiddenException {
@@ -37,7 +37,7 @@ public class RequestReceiver {
 
             try (var fis = new FileInputStream(file)) {
 
-                var responseBuilder = new HttpResponseBuilderImpl<FileInputStream>();
+                var responseBuilder = new HttpResponseMetaBuilder();
                 responseBuilder.setStatusCode(200);
                 responseBuilder.setMimeType(mimeType);
                 var response = responseBuilder.build();
@@ -57,7 +57,7 @@ public class RequestReceiver {
     public void notAllowedRespond(OutputStream respondTo)
         throws IOException {
 
-        var responseBuilder = new HttpResponseBuilderImpl<String>();
+        var responseBuilder = new HttpResponseMetaBuilder();
         responseBuilder.setStatusCode(405);
 
         var response = responseBuilder.build();
@@ -67,7 +67,7 @@ public class RequestReceiver {
     public void badRespond(OutputStream respondTo)
         throws IOException {
 
-        var responseBuilder = new HttpResponseBuilderImpl<String>();
+        var responseBuilder = new HttpResponseMetaBuilder();
         responseBuilder.setStatusCode(400);
 
         var response = responseBuilder.build();
@@ -77,7 +77,7 @@ public class RequestReceiver {
     public void notFoundRespond(OutputStream respondTo)
         throws IOException {
 
-        var responseBuilder = new HttpResponseBuilderImpl<String>();
+        var responseBuilder = new HttpResponseMetaBuilder();
         responseBuilder.setStatusCode(404);
 
         var response = responseBuilder.build();
@@ -87,7 +87,7 @@ public class RequestReceiver {
     public void forbiddenRespond(OutputStream respondTo)
         throws IOException {
 
-        var responseBuilder = new HttpResponseBuilderImpl<String>();
+        var responseBuilder = new HttpResponseMetaBuilder();
         responseBuilder.setStatusCode(403);
 
         var response = responseBuilder.build();
