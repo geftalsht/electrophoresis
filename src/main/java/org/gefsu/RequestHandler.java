@@ -27,13 +27,12 @@ public class RequestHandler {
             command = new BadCommand(socketOut);
         }
         command.execute();
-        
+
     }
 
     private Command createCommand(HttpRequest request) {
-        var method = request.getMethod();
 
-        if (method == HttpMethod.GET)
+        if (request.getMethod() == HttpMethod.GET)
             return new GetResourceCommand(socketOut, request.getResource());
 
         return new NotAllowedCommand(socketOut);

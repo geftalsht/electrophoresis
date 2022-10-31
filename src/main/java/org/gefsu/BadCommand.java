@@ -1,5 +1,6 @@
 package org.gefsu;
 
+import java.io.IOException;
 import java.io.OutputStream;
 
 public class BadCommand implements Command {
@@ -13,7 +14,7 @@ public class BadCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public void execute() throws IOException {
         receiver.badRespond(socketOut);
     }
 

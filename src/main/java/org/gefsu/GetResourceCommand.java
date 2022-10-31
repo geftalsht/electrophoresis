@@ -1,5 +1,6 @@
 package org.gefsu;
 
+import java.io.IOException;
 import java.io.OutputStream;
 
 public class GetResourceCommand implements Command {
@@ -15,7 +16,7 @@ public class GetResourceCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public void execute() throws IOException {
         receiver.getResource(resourceName, socketOut);
     }
 
