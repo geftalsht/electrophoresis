@@ -1,5 +1,6 @@
 package org.gefsu;
 
+import org.gefsu.http.exception.ForbiddenException;
 import org.gefsu.http.exception.NotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -22,6 +23,8 @@ public class GetResourceCommand implements Command {
             receiver.getResource(resourceName, socketOut);
         } catch (NotFoundException e) {
             receiver.notFoundRespond(socketOut);
+        } catch (ForbiddenException e) {
+            receiver.forbiddenRespond(socketOut);
         }
     }
 
