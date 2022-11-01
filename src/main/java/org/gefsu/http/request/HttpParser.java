@@ -3,22 +3,23 @@ package org.gefsu.http.request;
 import org.gefsu.http.exception.BadRequestException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
+import static org.gefsu.OptionalUtils.lift;
 
 // Scuffed HTTP Parser 0.1.0
 // At this moment it only parses the start line of an HTTP message
 // and ignores everything else (every header and body)
 public class HttpParser {
 
-    public static HttpRequest parseRequest(InputStream is)
-        throws IOException, BadRequestException {
+    public static Optional<HttpRequest> parseRequest(InputStream is) {
+        return lift(() -> {
+            var startLine = parseStartLine(is);
 
-        var startLine = parseStartLine(is);
+            var method = parseMethod(startLine);
+            var resource = parseResource(startLine);
 
-        var method = parseMethod(startLine);
-        var resource = parseResource(startLine);
-
-        return new HttpRequest(method, resource);
-
+            return new HttpRequest(method, resource);
+        });
     }
 
     private static String parseStartLine(InputStream is)

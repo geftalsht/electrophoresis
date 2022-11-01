@@ -1,83 +1,49 @@
 package org.gefsu;
 
-import org.gefsu.http.exception.BadRequestException;
-import org.gefsu.http.request.HttpMethod;
 import org.gefsu.http.request.HttpParser;
-import org.gefsu.http.request.HttpRequest;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
-import java.util.Arrays;
+import java.net.Socket;
 import java.util.Optional;
 
-public class Server {
-    public static void main(String[] args) {
-        Arrays.stream(args)
-            .findFirst()
-            .flatMap(Server::safeParseInt)
-            .filter(Server::portIsValid)
-            .flatMap(Server::tryServerSocket)
-            .ifPresentOrElse(
-                Server::listen,
-                () -> System.out.println("Server failed to start."));
+import static org.gefsu.OptionalUtils.ifPresent;
+
+class Server {
+
+    private final ServerSocket socket;
+
+    private Server(int port) throws IOException {
+        socket = new ServerSocket(port);
     }
 
-    private static Optional<Integer> safeParseInt(String s) {
-        try {
-            return Optional.of(Integer.parseInt(s));
-        } catch (NumberFormatException e) {
-            return Optional.empty();
-        }
+    public static Optional<Server> makeServer(int port) {
+        return OptionalUtils.lift(() -> new Server(port));
     }
 
-    private static boolean portIsValid(int port) {
-        return port >= 0 && port <= 65535;
-    }
-
-    private static Optional<ServerSocket> tryServerSocket(int port) {
-        try {
-            return Optional.of(new ServerSocket(port));
-        } catch (IOException e) {
-            return Optional.empty();
-        }
-    }
-
-    @SuppressWarnings("InfiniteRecursion")
-    private static void listen(ServerSocket serverSocket) {
+    @SuppressWarnings("InfiniteLoopStatement")
+    public void listen() {
         // Create a clientSocket object
-        try (var clientSocket = serverSocket.accept();
-             var socketIn = clientSocket.getInputStream();
-             var socketOut = clientSocket.getOutputStream())
-        {
-            handleClient(socketIn, socketOut);
-        } catch (IOException e) {
-            System.out.println("Failed to obtain the client socket!");
-        } finally {
-            listen(serverSocket);
+        while (true) {
+            try (var client = socket.accept()) {
+                handleConnection(client);
+            } catch (IOException e) {
+                System.out.println("Failed to obtain the client socket!");
+            }
         }
     }
 
-    private static void handleClient(InputStream socketIn, OutputStream socketOut)
-        throws IOException {
+    private void handleConnection(Socket client) {
+         //try (var client = socket.accept();
+        //                 var socketIn = client.getInputStream();
+        //                 var socketOut = client.getOutputStream()) {
+        //                Main.handleClient(socketIn, socketOut);
+        var handler = OptionalUtils.lift(client::getInputStream)
+            .flatMap(HttpParser::parseRequest)
+            .map(r -> HttpHandler.getHandler(r))
+            .or(() -> Optional.ofNullable(HttpHandler.errorHandler()));
 
-        Command command;
+        ifPresent(handler, OptionalUtils.lift(client::getOutputStream), HttpHandler::handle);
 
-        try {
-            command = createCommand(HttpParser.parseRequest(socketIn), socketOut);
-        } catch (BadRequestException e) {
-            command = new SimpleCommand(socketOut, 400);
-        }
-
-        command.execute();
-    }
-
-    private static Command createCommand(HttpRequest request, OutputStream socketOut) {
-
-        if (request.getMethod() == HttpMethod.GET)
-            return new GetResourceCommand(socketOut, request.getResource());
-
-        return new SimpleCommand(socketOut, 405);
     }
 
 }
