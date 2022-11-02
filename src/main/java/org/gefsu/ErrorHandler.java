@@ -1,6 +1,8 @@
 package org.gefsu;
 
 import org.gefsu.http.HttpResponseMetaBuilder;
+import org.gefsu.http.HttpRequest;
+import java.io.IOException;
 import java.io.OutputStream;
 
 public class ErrorHandler extends HttpHandler {
@@ -20,14 +22,17 @@ public class ErrorHandler extends HttpHandler {
     }
 
     @Override
-    public void handle(OutputStream outputStream) {
-        // Today I will write the error to the outputStream
-        // Clueless
+    public void handle(HttpRequest request, OutputStream outputStream) {
         var response = new HttpResponseMetaBuilder()
             .setStatusCode(statusCode)
             .build();
 
-        // FIXME How to process this exception?
-        outputStream.write(response.metaToBytes());
+        // TODO Any other ideas?
+        try {
+            outputStream.write(response.metaToBytes());
+        } catch (IOException e) {
+            System.out.println("Error writing to the OutputStream");
+        }
+
     }
 }

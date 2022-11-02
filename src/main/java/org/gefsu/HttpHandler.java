@@ -1,7 +1,7 @@
 package org.gefsu;
 
-import org.gefsu.http.request.HttpMethod;
-import org.gefsu.http.request.HttpRequest;
+import org.gefsu.http.HttpMethod;
+import org.gefsu.http.HttpRequest;
 import java.io.OutputStream;
 import java.util.Map;
 import java.util.Optional;
@@ -31,7 +31,7 @@ public abstract class HttpHandler {
         return OptionalUtils.lift(() -> handlerMap.get(request.getMethod()));
     }
 
-    public static HttpHandler errorHandler() {
+    public static HttpHandler genericErrorHandler() {
         return ErrorHandler.generic();
     }
 
