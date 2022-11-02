@@ -64,14 +64,4 @@ public class RequestReceiver {
         return "binary";
     }
 
-    public void simpleRespond(OutputStream respondTo, int statusCode)
-        throws IOException {
-
-        var responseBuilder = new HttpResponseMetaBuilder();
-        responseBuilder.setStatusCode(statusCode);
-
-        var response = responseBuilder.build();
-        respondTo.write(response.metaToBytes());
-    }
-
 }

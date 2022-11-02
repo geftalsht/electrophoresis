@@ -4,17 +4,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// TODO If methods return this builder you can chain them
 public class HttpResponseMetaBuilder {
 
     int statusCode;
     Map<String, List<String>> headers;
 
-    public void setStatusCode(int statusCode) {
+    public HttpResponseMetaBuilder setStatusCode(int statusCode) {
         this.statusCode = statusCode;
+        return this;
     }
 
-    private void addHeader(String key, String value) {
+    private HttpResponseMetaBuilder addHeader(String key, String value) {
         if (headers == null)
             headers = new HashMap<>();
 
@@ -23,14 +23,16 @@ public class HttpResponseMetaBuilder {
         else
             headers.replace(key, List.of(value));
 
+        return this;
     }
 
-    public void setMimeType(String mimeType) {
+    public HttpResponseMetaBuilder setMimeType(String mimeType) {
         addHeader("Content-Type", mimeType);
+        return this;
     }
 
     public HttpResponseMeta build() {
-        return new HttpResponseMeta(statusCode, headers);
+        return new HttpResponseMeta(this);
     }
 
 }

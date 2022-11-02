@@ -22,7 +22,6 @@ class Server {
 
     @SuppressWarnings("InfiniteLoopStatement")
     public void listen() {
-        // Create a clientSocket object
         while (true) {
             try (var client = socket.accept()) {
                 handleConnection(client);
@@ -33,14 +32,10 @@ class Server {
     }
 
     private void handleConnection(Socket client) {
-         //try (var client = socket.accept();
-        //                 var socketIn = client.getInputStream();
-        //                 var socketOut = client.getOutputStream()) {
-        //                Main.handleClient(socketIn, socketOut);
         var handler = OptionalUtils.lift(client::getInputStream)
             .flatMap(HttpParser::parseRequest)
-            .map(r -> HttpHandler.getHandler(r))
-            .or(() -> Optional.ofNullable(HttpHandler.errorHandler()));
+            .flatMap(HttpHandler::getHandler)
+            .or(() -> Optional.of(HttpHandler.errorHandler()));
 
         ifPresent(handler, OptionalUtils.lift(client::getOutputStream), HttpHandler::handle);
 
