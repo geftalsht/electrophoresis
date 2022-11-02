@@ -22,7 +22,7 @@ public class ErrorHandler extends HttpHandler {
     }
 
     @Override
-    public void handle(HttpRequest request, OutputStream outputStream) {
+    public void handle(OutputStream outputStream, HttpRequest request) {
         var response = new HttpResponseMetaBuilder()
             .setStatusCode(statusCode)
             .build();

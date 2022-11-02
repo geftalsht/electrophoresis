@@ -1,6 +1,6 @@
 package org.gefsu;
 
-import org.gefsu.http.request.HttpParser;
+import org.gefsu.http.HttpParser;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -32,13 +32,18 @@ class Server {
     }
 
     private void handleConnection(Socket client) {
-        var handler = OptionalUtils.lift(client::getInputStream)
-            .flatMap(HttpParser::parseRequest)
+
+        //  Contains information about the HttpRequest if parsing succeeded, or an empty optional if parsing failed
+        final var request = OptionalUtils.lift(client::getInputStream)
+            .flatMap(HttpParser::parseRequest);
+
+        // Returns a handler by either locating it in the map or by creating a generic error handler
+        final var handler = request
             .flatMap(HttpHandler::getHandler)
-            .or(() -> Optional.of(HttpHandler.errorHandler()));
+            .orElseGet(HttpHandler::genericErrorHandler);
 
-        ifPresent(handler, OptionalUtils.lift(client::getOutputStream), HttpHandler::handle);
-
+        // FIXME: If the request is not present, for example, due to a parsing error, nothing will happen
+        ifPresent(OptionalUtils.lift(client::getOutputStream), request, handler::handle);
     }
 
 }
