@@ -22,6 +22,7 @@ public class OptionalUtils {
         }
     }
 
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public static <A,B> void ifPresent(Optional<A> oa, Optional<B> ob, F2<A,B> f) {
         if (oa.isPresent() && ob.isPresent())
             f.combine(oa.get(), ob.get());
