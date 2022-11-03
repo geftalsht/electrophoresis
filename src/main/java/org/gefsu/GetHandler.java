@@ -2,13 +2,14 @@ package org.gefsu;
 
 import org.gefsu.http.HttpRequest;
 import java.io.OutputStream;
+import java.util.Optional;
 import java.util.Properties;
 
 public class GetHandler extends HttpHandler {
 
     // FIXME Implementation not finished
     @Override
-    public void handle(OutputStream outputStream, HttpRequest request) {
+    public void handle(OutputStream outputStream, Optional<String> uri) {
 
         Properties properties = new Properties();
 

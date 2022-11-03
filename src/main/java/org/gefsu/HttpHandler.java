@@ -35,6 +35,6 @@ public abstract class HttpHandler {
         return ErrorHandler.generic();
     }
 
-    public abstract void handle(OutputStream outputStream, HttpRequest request);
+public abstract void handle(OutputStream outputStream, Optional<String> uri);
 
 }

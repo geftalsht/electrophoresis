@@ -1,6 +1,8 @@
 package org.gefsu;
 
 import org.gefsu.http.HttpParser;
+import org.gefsu.http.HttpRequest;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -41,8 +43,9 @@ class Server {
             .flatMap(HttpHandler::getHandler)
             .orElseGet(HttpHandler::genericErrorHandler);
 
-        // FIXME: If the request is not present, for example, due to a parsing error, nothing will happen
-        ifPresent(OptionalUtils.lift(client::getOutputStream), request, handler::handle);
+        OptionalUtils.lift(client::getOutputStream)
+            .ifPresent(s -> handler.handle(s, request.map(r -> r.getResource())));
+
     }
 
 }
