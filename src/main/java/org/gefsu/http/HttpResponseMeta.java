@@ -6,12 +6,12 @@ import java.util.Map;
 
 public class HttpResponseMeta {
 
-    final int responseCode;
+    final int statusCode;
     final Map<String, List<String>> headers;
 
-    HttpResponseMeta(int responseCode, Map<String, List<String>> headers) {
-        this.responseCode = responseCode;
-        this.headers = headers;
+    HttpResponseMeta(HttpResponseMetaBuilder builder) {
+        statusCode = builder.statusCode;
+        headers = builder.headers;
     }
 
     private String metaToString() {
@@ -19,12 +19,13 @@ public class HttpResponseMeta {
         var sb = new StringBuilder();
 
         sb.append("HTTP/1.1 ")
-            .append(responseCode)
-            .append(responseMessage(responseCode))
+            .append(statusCode)
+            .append(responseMessage(statusCode))
             .append("\r\n");
 
         if (headers != null) {
             sb.append(headersToString());
+            sb.append("\r\n");
             sb.append("\r\n");
         }
 

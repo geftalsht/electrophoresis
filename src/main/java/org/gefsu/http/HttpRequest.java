@@ -1,4 +1,4 @@
-package org.gefsu.http.request;
+package org.gefsu.http;
 
 public class HttpRequest {
 
