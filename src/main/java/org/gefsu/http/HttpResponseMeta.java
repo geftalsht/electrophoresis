@@ -26,6 +26,7 @@ public class HttpResponseMeta {
         if (headers != null) {
             sb.append(headersToString());
             sb.append("\r\n");
+            sb.append("\r\n");
         }
 
         return sb.toString();

@@ -1,26 +1,44 @@
 package org.gefsu;
 
 import org.gefsu.http.HttpRequest;
+import org.gefsu.http.HttpResponseMetaBuilder;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Optional;
-import java.util.Properties;
+import static org.gefsu.Main.CONFIG;
+import static org.gefsu.Main.CONTENTROOT;
 
 public class GetHandler extends HttpHandler {
 
-    // FIXME Implementation not finished
     @Override
-    public void handle(OutputStream outputStream, Optional<String> uri) {
+    public void handle(OutputStream outputStream, Optional<HttpRequest> request) {
+        request.map(this::requestedFileExists)
+            .ifPresentOrElse(
+                file -> {
+                    if (!file)
+                        ErrorHandler.notFound().handle(outputStream, request);
+                    else
+                        //noinspection OptionalGetWithoutIsPresent
+                        getFile(outputStream, request.get().getResource());},
+                () -> ErrorHandler.badRequest().handle(outputStream, request));
+    }
 
-        Properties properties = new Properties();
+    private void getFile(OutputStream outputStream, String fileName) {
 
-        try (var fis = getClass().getResourceAsStream("/mimetypes.properties")) {
-           properties.load(fis);
-        }
+       var response = new HttpResponseMetaBuilder()
+           .setStatusCode(200)
+           .setMimeType(CONFIG.getProperty(determineFileExtension(fileName)))
+           .build();
 
-        var mimeType = properties.getProperty(determineFileExtension(resourceName));
+       try (var fis = getClass().getResourceAsStream(CONTENTROOT + fileName)) {
+           outputStream.write(response.metaToBytes());
+           writeIt(fis, outputStream);
+       } catch (Exception e) {
+           System.out.println("Error writing file to the OutputStream");
+       }
 
-        // Can return null if resource is not found, can throw a NPE if resourceName is null
-        var fileUrl = getClass().getResource("/html" + resourceName);
     }
 
     private String determineFileExtension(String fileName) {
@@ -28,6 +46,26 @@ public class GetHandler extends HttpHandler {
         if (dot != -1)
             return fileName.substring(dot+1);
         return "binary";
+    }
+
+    private boolean requestedFileExists(HttpRequest request) {
+        try {
+            return new File(getClass().getResource(CONTENTROOT + request.getResource()).toURI()).isFile();
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
+    private void writeIt(InputStream in, OutputStream out)
+        throws IOException {
+
+        byte[] buf = new byte[1024];
+        int len;
+
+        while ((len = in.read(buf)) != -1) {
+            out.write(buf, 0, len);
+        }
     }
 
 }

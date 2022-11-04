@@ -12,12 +12,11 @@ public abstract class HttpHandler {
 
     static {
         var getHandler = new GetHandler();
-        var headHandler = new HeadHandler();
         var notImplementedHandler = ErrorHandler.notImplemented();
 
         handlerMap = Map.of(
             HttpMethod.GET, getHandler,
-            HttpMethod.HEAD, headHandler,
+            HttpMethod.HEAD, notImplementedHandler,
             HttpMethod.POST, notImplementedHandler,
             HttpMethod.PUT, notImplementedHandler,
             HttpMethod.DELETE, notImplementedHandler,
@@ -35,6 +34,7 @@ public abstract class HttpHandler {
         return ErrorHandler.generic();
     }
 
-public abstract void handle(OutputStream outputStream, Optional<String> uri);
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+public abstract void handle(OutputStream outputStream, Optional<HttpRequest> request);
 
 }

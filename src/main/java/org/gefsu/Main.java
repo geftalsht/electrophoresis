@@ -5,11 +5,13 @@ import java.util.Properties;
 
 public class Main {
 
-    private static final Properties CONFIG = new Properties();
+    public static final Properties CONFIG = new Properties();
+    public static final String CONTENTROOT = "/html";
+
     public static void main(String[] args) {
 
         try (final var fin =
-                 Main.class.getResourceAsStream("/mimetypes.properies")) {
+                 Main.class.getResourceAsStream("/mimetypes.properties")) {
             CONFIG.load(fin);
         } catch (Exception e) {
             System.out.println("Failed to read server configuration. Terminating.");
@@ -23,7 +25,8 @@ public class Main {
             .flatMap(Server::makeServer)
             .ifPresentOrElse(
                 Server::listen,
-                () -> System.out.println("Server failed to start."));
+                () -> System.out.println("Server failed to start. " +
+                    "Make sure you provided a valid port as an argument."));
     }
 
     private static boolean portIsValid(int port) {

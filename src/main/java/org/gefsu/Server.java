@@ -1,13 +1,10 @@
 package org.gefsu;
 
 import org.gefsu.http.HttpParser;
-import org.gefsu.http.HttpRequest;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Optional;
-import static org.gefsu.OptionalUtils.ifPresent;
 
 class Server {
 
@@ -44,7 +41,13 @@ class Server {
             .orElseGet(HttpHandler::genericErrorHandler);
 
         OptionalUtils.lift(client::getOutputStream)
-            .ifPresent(s -> handler.handle(s, request.map(r -> r.getResource())));
+            .ifPresent(s -> handler.handle(s, request));
+
+        try {
+            client.close();
+        } catch (IOException e) {
+            System.out.println("Error closing the client socket.");
+}
 
     }
 
