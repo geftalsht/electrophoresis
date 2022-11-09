@@ -1,22 +1,10 @@
 package org.gefsu;
 
 import java.util.Arrays;
-import java.util.Properties;
 
 public class Main {
 
-    public static final Properties CONFIG = new Properties();
-    public static final String CONTENTROOT = "/html";
-
     public static void main(String[] args) {
-
-        try (final var fin =
-                 Main.class.getResourceAsStream("/mimetypes.properties")) {
-            CONFIG.load(fin);
-        } catch (Exception e) {
-            System.out.println("Failed to read server configuration. Terminating.");
-            return;
-        }
 
         Arrays.stream(args)
             .findFirst()

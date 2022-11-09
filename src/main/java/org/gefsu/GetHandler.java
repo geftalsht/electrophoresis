@@ -7,8 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Optional;
-import static org.gefsu.Main.CONFIG;
-import static org.gefsu.Main.CONTENTROOT;
+import static org.gefsu.ServerSettings.SETTINGS;
 
 public class GetHandler extends HttpHandler {
 
@@ -21,18 +20,20 @@ public class GetHandler extends HttpHandler {
                         ErrorHandler.notFound().handle(outputStream, request);
                     else
                         //noinspection OptionalGetWithoutIsPresent
-                        getFile(outputStream, request.get().getResource());},
+                        sendFile(outputStream, request.get().getResource());},
                 () -> ErrorHandler.badRequest().handle(outputStream, request));
     }
 
-    private void getFile(OutputStream outputStream, String fileName) {
+    private void sendFile(OutputStream outputStream, String fileName) {
 
        var response = new HttpResponseMetaBuilder()
            .setStatusCode(200)
-           .setMimeType(CONFIG.getProperty(determineFileExtension(fileName)))
+           .setMimeType(SETTINGS.CONFIG.getProperty(determineFileExtension(fileName)))
            .build();
 
-       try (var fis = getClass().getResourceAsStream(CONTENTROOT + fileName)) {
+       try (var fis = getClass()
+           .getResourceAsStream(SETTINGS.CONFIG.getProperty("rootPath") + fileName)) {
+
            outputStream.write(response.metaToBytes());
            writeIt(fis, outputStream);
        } catch (Exception e) {
@@ -50,7 +51,10 @@ public class GetHandler extends HttpHandler {
 
     private boolean requestedFileExists(HttpRequest request) {
         try {
-            return new File(getClass().getResource(CONTENTROOT + request.getResource()).toURI()).isFile();
+            return new File(getClass()
+                .getResource(SETTINGS.CONFIG.getProperty("rootPath") + request.getResource())
+                .toURI())
+                .isFile();
         } catch (Exception e) {
             return false;
         }
