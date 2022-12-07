@@ -6,6 +6,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Optional;
 
+import static org.gefsu.OptionalUtils.lift;
+
 class Server {
     private final ServerSocket socket;
 
@@ -14,7 +16,7 @@ class Server {
     }
 
     public static Optional<Server> makeServer(int port) {
-        return OptionalUtils.lift(() -> new Server(port));
+        return lift(() -> new Server(port));
     }
 
     @SuppressWarnings("InfiniteLoopStatement")
@@ -28,10 +30,10 @@ class Server {
         }
     }
 
-    // TODO Replace this with the invokation of SocketController pipeline
+    // TODO Replace this with the invocation of SocketController pipeline
     private void handleConnection(Socket client) {
         //  Contains information about the HttpRequest if parsing succeeded, or an empty optional if parsing failed
-        final var request = OptionalUtils.lift(client::getInputStream)
+        final var request = lift(client::getInputStream)
             .flatMap(HttpParser::parseRequest);
 
         // Returns a handler by either locating it in the map or by creating a generic error handler
@@ -39,7 +41,7 @@ class Server {
             .flatMap(HttpHandler::getHandler)
             .orElseGet(HttpHandler::genericErrorHandler);
 
-        OptionalUtils.lift(client::getOutputStream)
+        lift(client::getOutputStream)
             .ifPresent(s -> handler.handle(s, request));
 
         try {

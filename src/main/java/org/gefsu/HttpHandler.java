@@ -6,6 +6,8 @@ import java.io.OutputStream;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.gefsu.OptionalUtils.lift;
+
 public abstract class HttpHandler {
 
     private static final Map<HttpMethod, HttpHandler> handlerMap;
@@ -27,7 +29,7 @@ public abstract class HttpHandler {
     }
 
     public static Optional<HttpHandler> getHandler(HttpRequest request) {
-        return OptionalUtils.lift(() -> handlerMap.get(request.getMethod()));
+        return lift(() -> handlerMap.get(request.getMethod()));
     }
 
     public static HttpHandler genericErrorHandler() {

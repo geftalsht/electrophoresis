@@ -2,11 +2,13 @@ package org.gefsu;
 
 import java.util.Arrays;
 
+import static org.gefsu.OptionalUtils.lift;
+
 public class Main {
     public static void main(String[] args) {
         Arrays.stream(args)
             .findFirst()
-            .flatMap(x -> OptionalUtils.lift(() -> Integer.parseInt(x)))
+            .flatMap(x -> lift(() -> Integer.parseInt(x)))
             .filter(Main::portIsValid)
             .flatMap(Server::makeServer)
             .ifPresentOrElse(

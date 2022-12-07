@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Optional;
+
 import static org.gefsu.ServerSettings.SETTINGS;
 
 public class GetHandler extends HttpHandler {
