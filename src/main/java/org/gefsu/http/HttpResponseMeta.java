@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpResponseMeta {
-
     final int statusCode;
     final Map<String, List<String>> headers;
 
@@ -28,7 +27,6 @@ public class HttpResponseMeta {
             sb.append("\r\n");
             sb.append("\r\n");
         }
-
         return sb.toString();
     }
 
@@ -50,7 +48,6 @@ public class HttpResponseMeta {
                         sb.append("; ");
                 });
             });
-
         return sb.toString();
     }
 
@@ -70,5 +67,4 @@ public class HttpResponseMeta {
                 default -> "";
             };
     }
-
 }

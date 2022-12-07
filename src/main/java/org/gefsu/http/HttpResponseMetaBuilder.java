@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpResponseMetaBuilder {
-
     int statusCode;
     Map<String, List<String>> headers;
 
@@ -34,5 +33,4 @@ public class HttpResponseMetaBuilder {
     public HttpResponseMeta build() {
         return new HttpResponseMeta(this);
     }
-
 }

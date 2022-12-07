@@ -8,7 +8,6 @@ import static org.gefsu.OptionalUtils.lift;
 // At this moment it only parses the start line of an HTTP message
 // and ignores everything else (every header and body)
 public class HttpParser {
-
     public static Optional<HttpRequest> parseRequest(InputStream is) {
         return lift(() -> {
             var startLine = parseStartLine(is);
@@ -43,7 +42,6 @@ public class HttpParser {
                     throw new Exception();
             }
         }
-
         return sb.toString();
     }
 
@@ -72,8 +70,6 @@ public class HttpParser {
     private static String parseResource(String startLine) {
         var firstSpace = startLine.indexOf(' ');
         var lastSpace = startLine.lastIndexOf(' ');
-
         return startLine.substring(firstSpace+1, lastSpace);
     }
-
 }

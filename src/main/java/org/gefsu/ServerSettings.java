@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ServerSettings {
-
     public static final ServerSettings SETTINGS = new ServerSettings();
     public final Properties CONFIG;
 
@@ -17,5 +16,4 @@ public class ServerSettings {
            System.out.println("Failed to load the server configuration");
        }
    }
-
 }

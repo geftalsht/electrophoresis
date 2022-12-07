@@ -3,7 +3,6 @@ package org.gefsu;
 import java.util.Optional;
 
 public class OptionalUtils {
-
     @FunctionalInterface
     public interface Producer<T> {
         T get() throws Exception;
@@ -16,5 +15,4 @@ public class OptionalUtils {
             return Optional.empty();
         }
     }
-
 }

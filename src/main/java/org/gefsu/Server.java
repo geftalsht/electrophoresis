@@ -7,7 +7,6 @@ import java.net.Socket;
 import java.util.Optional;
 
 class Server {
-
     private final ServerSocket socket;
 
     private Server(int port) throws IOException {
@@ -29,8 +28,8 @@ class Server {
         }
     }
 
+    // TODO Replace this with the invokation of SocketController pipeline
     private void handleConnection(Socket client) {
-
         //  Contains information about the HttpRequest if parsing succeeded, or an empty optional if parsing failed
         final var request = OptionalUtils.lift(client::getInputStream)
             .flatMap(HttpParser::parseRequest);
@@ -47,8 +46,6 @@ class Server {
             client.close();
         } catch (IOException e) {
             System.out.println("Error closing the client socket.");
-}
-
+        }
     }
-
 }

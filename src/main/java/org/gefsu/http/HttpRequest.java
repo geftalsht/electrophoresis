@@ -1,7 +1,6 @@
 package org.gefsu.http;
 
 public class HttpRequest {
-
     private final HttpMethod method;
     private final String resource;
 
@@ -17,5 +16,4 @@ public class HttpRequest {
     public String getResource() {
         return resource;
     }
-
 }

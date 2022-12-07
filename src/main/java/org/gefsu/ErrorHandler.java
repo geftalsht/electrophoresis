@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import java.util.Optional;
 
 public class ErrorHandler extends HttpHandler {
-
     private final int statusCode;
 
     private ErrorHandler(int statusCode) {
