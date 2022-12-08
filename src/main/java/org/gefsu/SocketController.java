@@ -13,16 +13,19 @@ public class SocketController {
     private final Socket clientSocket;
     private final Optional<InputStream > clientInput;
     private final Optional<OutputStream> clientOutput;
+    private final RequestHandlerDispatcher handlerDispatcher
+        = new RequestHandlerDispatcher();
 
-    private SocketController(Socket clientSocket) {
+    public SocketController(Socket clientSocket) {
         this.clientSocket = clientSocket;
         clientInput = lift(() -> clientSocket.getInputStream());
         clientOutput = lift(() -> clientSocket.getOutputStream());
     }
 
-    // TODO Write the pipeline
+    // TODO Finish writing the pipeline
     public void torture() {
         final var balls = clientInput
-            .flatMap(clientInput -> parseRequest(clientInput));
+            .flatMap(clientInput -> parseRequest(clientInput))
+            .flatMap(request -> handlerDispatcher.handleRequest(request));
     }
 }

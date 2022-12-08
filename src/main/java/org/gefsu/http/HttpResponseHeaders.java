@@ -4,11 +4,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
-public class HttpResponseMeta {
+public class HttpResponseHeaders {
     final int statusCode;
     final Map<String, List<String>> headers;
 
-    HttpResponseMeta(HttpResponseMetaBuilder builder) {
+    HttpResponseHeaders(HttpResponseHeadersBuilder builder) {
         statusCode = builder.statusCode;
         headers = builder.headers;
     }

@@ -4,16 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HttpResponseMetaBuilder {
+public class HttpResponseHeadersBuilder {
     int statusCode;
     Map<String, List<String>> headers;
 
-    public HttpResponseMetaBuilder setStatusCode(int statusCode) {
+    public HttpResponseHeadersBuilder setStatusCode(int statusCode) {
         this.statusCode = statusCode;
         return this;
     }
 
-    private HttpResponseMetaBuilder addHeader(String key, String value) {
+    private HttpResponseHeadersBuilder addHeader(String key, String value) {
         if (headers == null)
             headers = new HashMap<>();
 
@@ -25,12 +25,12 @@ public class HttpResponseMetaBuilder {
         return this;
     }
 
-    public HttpResponseMetaBuilder setMimeType(String mimeType) {
+    public HttpResponseHeadersBuilder setMimeType(String mimeType) {
         addHeader("Content-Type", mimeType);
         return this;
     }
 
-    public HttpResponseMeta build() {
-        return new HttpResponseMeta(this);
+    public HttpResponseHeaders build() {
+        return new HttpResponseHeaders(this);
     }
 }
