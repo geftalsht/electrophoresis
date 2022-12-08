@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface HttpRequestMapping {
-    HttpMethod[] method();
+    HttpMethod method();
     String url();
 }
