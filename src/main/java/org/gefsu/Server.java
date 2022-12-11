@@ -24,7 +24,7 @@ class Server {
     public void listen() {
         while (true) {
             try (var client = socket.accept()) {
-                new SocketController(client, handlerDispatcher).torture();
+                new SocketController(client, handlerDispatcher).processRequests();
             } catch (IOException e) {
                 System.out.println("Failed to obtain the client socket!");
             }

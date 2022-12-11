@@ -2,6 +2,7 @@ package org.gefsu;
 
 import org.gefsu.http.HttpRequest;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -14,7 +15,7 @@ public class RequestHandlerDispatcher {
         this.controller = controller;
     }
 
-    public Optional<String> handleRequest(HttpRequest request) {
+    public Optional<URI> handleRequest(HttpRequest request) {
         final var requestMethod = request.getMethod();
         final var requestResource = request.getResource();
 
@@ -34,7 +35,7 @@ public class RequestHandlerDispatcher {
             .filter(method -> method.canAccess(controller))
             .findFirst()
             .flatMap(method -> lift(
-                () -> (String) method.invoke(requestResource))
+                () -> (URI) method.invoke(requestResource))
             );
     }
 }
