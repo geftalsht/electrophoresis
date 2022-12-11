@@ -16,7 +16,7 @@ public class ScuffedController {
     }
 
     @SuppressWarnings({"Convert2MethodRef", "DataFlowIssue"})
-    @HttpRequestMapping(method = HttpMethod.GET, url = "/*")
+    @HttpRequestMapping(method = HttpMethod.GET, url = "/(.*)")
     public HttpResponse getStaticResource(String resource) {
         return lift(() -> new File(getClass()
             .getResource(settings.config.getProperty("rootPath") + resource)

@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpResponse {
-    final int statusCode;
-    final Map<String, List<String>> headers;
-    final URI uri;
+    private final int statusCode;
+    private final Map<String, List<String>> headers;
+    private final URI uri;
 
     HttpResponse(HttpResponseBuilder builder) {
         statusCode = builder.statusCode;
@@ -68,5 +68,9 @@ public class HttpResponse {
                 });
             });
         return sb.toString();
+    }
+
+    public URI getUri() {
+        return uri;
     }
 }

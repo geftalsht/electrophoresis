@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import static org.gefsu.http.HttpParser.parseRequest;
+import static org.gefsu.Responder.writeResponseToOutput;
 
 public class SocketController {
     private final InputStream clientInput;
@@ -29,5 +30,6 @@ public class SocketController {
                 .handleRequest(request))
             .orElseGet(() -> new HttpResponseBuilder()
                 .buildSimpleErrorResponse(400));
+        writeResponseToOutput(clientOutput, response);
     }
 }

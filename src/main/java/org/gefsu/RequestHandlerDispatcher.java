@@ -9,7 +9,7 @@ import java.util.Arrays;
 import static org.gefsu.OptionalUtils.lift;
 
 public class RequestHandlerDispatcher {
-    ScuffedController controller;
+    final ScuffedController controller;
 
     public RequestHandlerDispatcher(ScuffedController controller) {
         this.controller = controller;
@@ -26,16 +26,17 @@ public class RequestHandlerDispatcher {
             .filter(method ->
                 method.getDeclaredAnnotation(HttpRequestMapping.class)
                     .method()
-                    .equals(requestMethod) &&
+                    .equals(requestMethod))
+            .filter(method ->
                 requestResource.matches(
                     method.getDeclaredAnnotation(HttpRequestMapping.class)
-                        .url()
-                )
+                        .url())
             )
             .filter(method -> method.canAccess(controller))
             .findFirst()
-            .flatMap(method -> lift(
-                () -> (HttpResponse) method.invoke(requestResource)))
+            .flatMap(method ->
+                lift(() -> (HttpResponse)
+                    method.invoke(controller, requestResource)))
             .orElseGet(() -> new HttpResponseBuilder()
                 .buildSimpleErrorResponse(500));
     }
