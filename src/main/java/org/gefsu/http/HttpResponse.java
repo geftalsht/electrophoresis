@@ -1,20 +1,22 @@
 package org.gefsu.http;
 
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
-public class HttpResponseHeaders {
+public class HttpResponse {
     final int statusCode;
     final Map<String, List<String>> headers;
+    final URI uri;
 
-    HttpResponseHeaders(HttpResponseHeadersBuilder builder) {
+    HttpResponse(HttpResponseBuilder builder) {
         statusCode = builder.statusCode;
         headers = builder.headers;
+        uri = builder.uri;
     }
 
-    private String metaToString() {
-
+    private String headersToString() {
         var sb = new StringBuilder();
 
         sb.append("HTTP/1.1 ")
@@ -23,14 +25,31 @@ public class HttpResponseHeaders {
             .append("\r\n");
 
         if (headers != null) {
-            sb.append(headersToString());
+            sb.append(httpHeaders());
             sb.append("\r\n");
             sb.append("\r\n");
         }
         return sb.toString();
     }
 
-    private String headersToString() {
+    public byte[] metaToBytes() {
+        return headersToString()
+            .getBytes(StandardCharsets.UTF_8);
+    }
+
+    private String responseMessage(int responseCode) {
+        return
+            switch (responseCode) {
+                case 200 -> "OK";
+                case 400 -> "Bad Request";
+                case 403 -> "Forbidden";
+                case 404 -> "Not Found";
+                case 405 -> "Method Not Allowed";
+                default -> "";
+            };
+    }
+
+    private String httpHeaders() {
         if (headers == null)
             return "";
 
@@ -49,22 +68,5 @@ public class HttpResponseHeaders {
                 });
             });
         return sb.toString();
-    }
-
-    public byte[] metaToBytes() {
-        return
-            metaToString().getBytes(StandardCharsets.UTF_8);
-    }
-
-    private String responseMessage(int responseCode) {
-        return
-            switch (responseCode) {
-                case 200 -> "OK";
-                case 400 -> "Bad Request";
-                case 403 -> "Forbidden";
-                case 404 -> "Not Found";
-                case 405 -> "Method Not Allowed";
-                default -> "";
-            };
     }
 }

@@ -1,20 +1,14 @@
 package org.gefsu;
 
+import org.gefsu.http.HttpResponse;
+
 import java.io.OutputStream;
-import java.net.URI;
-import java.util.Optional;
 
 public class Responder {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public static void writeResponse(
-        OutputStream outputStream, Optional<URI> uri)
+        OutputStream outputStream, HttpResponse response)
     {
-        uri.ifPresentOrElse(
-            uri1 -> {
 
-        },
-            () -> {
-
-        });
     }
 }

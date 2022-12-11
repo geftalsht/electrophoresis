@@ -14,4 +14,15 @@ public class ServerSettings {
            config.load(fis);
        }
    }
+
+   public String determineMimeType(String fileName) {
+       return config.getProperty(getFileExtension(fileName));
+   }
+
+   private String getFileExtension(String fileName) {
+       var dot = fileName.lastIndexOf('.');
+       if (dot != -1)
+           return fileName.substring(dot+1);
+       return "binary";
+   }
 }

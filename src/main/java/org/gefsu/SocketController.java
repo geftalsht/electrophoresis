@@ -1,11 +1,12 @@
 package org.gefsu;
 
+import org.gefsu.http.HttpResponseBuilder;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import static org.gefsu.Responder.writeResponse;
 import static org.gefsu.http.HttpParser.parseRequest;
 
 public class SocketController {
@@ -23,8 +24,10 @@ public class SocketController {
 
     @SuppressWarnings("Convert2MethodRef")
     public void processRequests() {
-        var resourceUri = parseRequest(clientInput)
-            .flatMap(request -> handlerDispatcher.handleRequest(request));
-        writeResponse(clientOutput, resourceUri);
+        final var response = parseRequest(clientInput)
+            .map(request -> handlerDispatcher
+                .handleRequest(request))
+            .orElseGet(() -> new HttpResponseBuilder()
+                .buildSimpleErrorResponse(400));
     }
 }

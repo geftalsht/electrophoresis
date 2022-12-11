@@ -1,10 +1,10 @@
 package org.gefsu;
 
 import org.gefsu.http.HttpRequest;
+import org.gefsu.http.HttpResponse;
+import org.gefsu.http.HttpResponseBuilder;
 
-import java.net.URI;
 import java.util.Arrays;
-import java.util.Optional;
 
 import static org.gefsu.OptionalUtils.lift;
 
@@ -15,7 +15,7 @@ public class RequestHandlerDispatcher {
         this.controller = controller;
     }
 
-    public Optional<URI> handleRequest(HttpRequest request) {
+    public HttpResponse handleRequest(HttpRequest request) {
         final var requestMethod = request.getMethod();
         final var requestResource = request.getResource();
 
@@ -35,7 +35,8 @@ public class RequestHandlerDispatcher {
             .filter(method -> method.canAccess(controller))
             .findFirst()
             .flatMap(method -> lift(
-                () -> (URI) method.invoke(requestResource))
-            );
+                () -> (HttpResponse) method.invoke(requestResource)))
+            .orElseGet(() -> new HttpResponseBuilder()
+                .buildSimpleErrorResponse(500));
     }
 }
