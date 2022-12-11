@@ -8,21 +8,17 @@ import java.util.Optional;
 import static org.gefsu.OptionalUtils.lift;
 
 public class RequestHandlerDispatcher {
-    // Reference to the single controller.
-    // Ideally I could maybe (probably) implement controller scanning
-    // like in Spring. But for now let's just scan this one controller
-    // for methods
+    ScuffedController controller;
 
-    // Creating this with new here is not a good idea, but I don't
-    // know how to improve it yet.
-    ScuffedController scuffedController = new ScuffedController();
+    public RequestHandlerDispatcher(ScuffedController controller) {
+        this.controller = controller;
+    }
 
-    // Can maybe return an optional ByteInputStream instead, idk
     public Optional<String> handleRequest(HttpRequest request) {
         final var requestMethod = request.getMethod();
         final var requestResource = request.getResource();
 
-        return Arrays.stream(scuffedController
+        return Arrays.stream(controller
             .getClass()
             .getMethods())
             .filter(method -> method.isAnnotationPresent(HttpRequestMapping.class))
@@ -35,7 +31,7 @@ public class RequestHandlerDispatcher {
                         .url()
                 )
             )
-            .filter(method -> method.canAccess(scuffedController))
+            .filter(method -> method.canAccess(controller))
             .findFirst()
             .flatMap(method -> lift(
                 () -> (String) method.invoke(requestResource))

@@ -10,14 +10,15 @@ import static org.gefsu.http.HttpParser.parseRequest;
 
 @SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "Convert2MethodRef"})
 public class SocketController {
-    private final Socket clientSocket;
     private final Optional<InputStream > clientInput;
     private final Optional<OutputStream> clientOutput;
-    private final RequestHandlerDispatcher handlerDispatcher
-        = new RequestHandlerDispatcher();
+    private final RequestHandlerDispatcher handlerDispatcher;
 
-    public SocketController(Socket clientSocket) {
-        this.clientSocket = clientSocket;
+    public SocketController(
+        Socket clientSocket,
+        RequestHandlerDispatcher handlerDispatcher)
+    {
+        this.handlerDispatcher = handlerDispatcher;
         clientInput = lift(() -> clientSocket.getInputStream());
         clientOutput = lift(() -> clientSocket.getOutputStream());
     }
