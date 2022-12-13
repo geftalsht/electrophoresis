@@ -8,10 +8,11 @@ import java.io.File;
 
 import static org.gefsu.OptionalUtils.lift;
 
-public class ScuffedController {
+@Controller
+public class GetController {
     private final ServerSettings settings;
 
-    public ScuffedController(ServerSettings settings) {
+    public GetController(ServerSettings settings) {
         this.settings = settings;
     }
 

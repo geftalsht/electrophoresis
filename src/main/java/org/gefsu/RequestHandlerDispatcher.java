@@ -9,9 +9,9 @@ import java.util.Arrays;
 import static org.gefsu.OptionalUtils.lift;
 
 public class RequestHandlerDispatcher {
-    final ScuffedController controller;
+    final GetController controller;
 
-    public RequestHandlerDispatcher(ScuffedController controller) {
+    public RequestHandlerDispatcher(GetController controller) {
         this.controller = controller;
     }
 

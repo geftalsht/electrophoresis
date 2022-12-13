@@ -12,7 +12,7 @@ class Server {
 
     private Server(int port, ServerSettings settings) throws IOException {
         socket = new ServerSocket(port);
-        ScuffedController controller = new ScuffedController(settings);
+        GetController controller = new GetController(settings);
         handlerDispatcher = new RequestHandlerDispatcher(controller);
     }
 
