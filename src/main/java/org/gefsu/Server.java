@@ -10,14 +10,16 @@ class Server {
     private final ServerSocket socket;
     private final RequestHandlerDispatcher handlerDispatcher;
 
-    private Server(int port, ServerSettings settings) throws IOException {
+    private Server(int port, HandlerMap<?> requestHandlers)
+        throws IOException
+    {
         socket = new ServerSocket(port);
-        GetController controller = new GetController(settings);
-        handlerDispatcher = new RequestHandlerDispatcher(controller);
+        handlerDispatcher = new RequestHandlerDispatcher(requestHandlers);
     }
 
-    public static Optional<Server> makeServer(int port, ServerSettings settings) {
-        return lift(() -> new Server(port, settings));
+    public static Optional<Server> makeServer(int port, HandlerMap<?> requestHandlers)
+    {
+        return lift(() -> new Server(port, requestHandlers));
     }
 
     @SuppressWarnings("InfiniteLoopStatement")
