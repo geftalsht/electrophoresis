@@ -33,7 +33,7 @@ public class Main {
             .filter(optionalObject -> optionalObject.isPresent())
             .map(object -> object.get())
             .toList();
-        final HandlerMap<?> requestHandlers = HandlerMap.create(controllerObjects);
+        final HandlerMap requestHandlers = HandlerMap.create(controllerObjects);
 
         //noinspection Convert2MethodRef
         Arrays.stream(args)

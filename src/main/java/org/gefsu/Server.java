@@ -10,14 +10,14 @@ class Server {
     private final ServerSocket socket;
     private final RequestHandlerDispatcher handlerDispatcher;
 
-    private Server(int port, HandlerMap<?> requestHandlers)
+    private Server(int port, HandlerMap requestHandlers)
         throws IOException
     {
         socket = new ServerSocket(port);
         handlerDispatcher = new RequestHandlerDispatcher(requestHandlers);
     }
 
-    public static Optional<Server> makeServer(int port, HandlerMap<?> requestHandlers)
+    public static Optional<Server> makeServer(int port, HandlerMap requestHandlers)
     {
         return lift(() -> new Server(port, requestHandlers));
     }

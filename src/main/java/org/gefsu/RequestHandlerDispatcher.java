@@ -4,9 +4,9 @@ import org.gefsu.http.HttpRequest;
 import org.gefsu.http.HttpResponse;
 
 public class RequestHandlerDispatcher {
-    private final HandlerMap<?> requestHandlers;
+    private final HandlerMap requestHandlers;
 
-    public RequestHandlerDispatcher(HandlerMap<?> requestHandlers) {
+    public RequestHandlerDispatcher(HandlerMap requestHandlers) {
         this.requestHandlers = requestHandlers;
     }
 
