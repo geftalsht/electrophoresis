@@ -11,6 +11,10 @@ import java.util.stream.Collectors;
 public class HandlerMap {
     private final Map<HttpMethod,List<Pair<String,Pair<Object,Method>>>> requestHandlers;
 
+    public Map<HttpMethod, List<Pair<String, Pair<Object, Method>>>> getRequestHandlers() {
+        return requestHandlers;
+    }
+
     public static HandlerMap create(final List<Object> controllerObjects) {
         final var parsed = Arrays.stream(HttpMethod.values())
             .collect(Collectors.toMap(
