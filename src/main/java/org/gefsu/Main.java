@@ -23,7 +23,7 @@ public class Main {
         final var componentScanner = new ComponentScanner();
         final Package pkg = componentScanner.getClass()
             .getPackage();
-        final List<?> controllerObjects = componentScanner
+        final List<Object> controllerObjects = componentScanner
             .findClassesAnnotatedWith(pkg, Controller.class)
             .stream()
             .map(aClass ->

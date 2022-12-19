@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HandlerMap {
-    private final Map<HttpMethod,List<Pair<String,Pair<?,Method>>>> requestHandlers;
+    private final Map<HttpMethod,List<Pair<String,Pair<Object,Method>>>> requestHandlers;
 
-    public static HandlerMap create(final List<?> controllerObjects) {
+    public static HandlerMap create(final List<Object> controllerObjects) {
         final var parsed = Arrays.stream(HttpMethod.values())
             .collect(Collectors.toMap(
                 httpMethod -> httpMethod,
@@ -19,30 +19,11 @@ public class HandlerMap {
 
         return new HandlerMap(parsed);
     }
-//        final var parsedd = controllerObjects
-//            .stream()
-//            .flatMap(controller -> Arrays.stream(controller
-//                    .getClass()
-//                    .getMethods())
-//                .filter(method -> method.isAnnotationPresent(HttpRequestMapping.class))
-//                .map(method -> Pair.of(controller, method)))
-//            .map(methodPair -> Pair.of(
-//                methodPair
-//                    .getRight()
-//                    .getAnnotation(HttpRequestMapping.class)
-//                    .url(),
-//                methodPair))
-//            .collect(Collectors.toMap(
-//                urlpair -> urlpair
-//                    .getRight()
-//                    .getRight()
-//                    .getAnnotation(HttpRequestMapping.class)
-//                    .method(),
-//                urlpair -> urlpair));
-    private static List<Pair<String, Pair<?,Method>>> findHandlers(
-        HttpMethod httpMethod, List<?> controllerObjects)
+
+    private static List<Pair<String, Pair<Object,Method>>> findHandlers(
+        HttpMethod httpMethod, List<Object> controllerObjects)
     {
-        final List<Pair<String, Pair<?,Method>>> cock = controllerObjects
+        return controllerObjects
             .stream()
             .flatMap(controller -> Arrays.stream(controller
                 .getClass()
@@ -60,11 +41,9 @@ public class HandlerMap {
                     .url(),
                 methodPair))
             .toList();
-
-        return cock;
     }
 
-    private HandlerMap(final Map<HttpMethod,List<Pair<String,Pair<?,Method>>>> parsedHandlers) {
+    private HandlerMap(final Map<HttpMethod,List<Pair<String,Pair<Object,Method>>>> parsedHandlers) {
         requestHandlers = parsedHandlers;
     }
 }
