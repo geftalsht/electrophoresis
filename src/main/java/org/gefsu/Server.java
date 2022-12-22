@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Optional;
 
-import static org.gefsu.OptionalUtils.lift;
+import static org.gefsu.util.OptionalUtils.lift;
 
 class Server {
     private final ServerSocket socket;

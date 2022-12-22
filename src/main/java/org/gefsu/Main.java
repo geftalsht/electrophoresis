@@ -1,10 +1,12 @@
 package org.gefsu;
 
+import org.gefsu.annotation.Controller;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.gefsu.OptionalUtils.lift;
+import static org.gefsu.util.OptionalUtils.lift;
 
 public class Main {
     @SuppressWarnings("Convert2MethodRef")

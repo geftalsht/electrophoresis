@@ -1,15 +1,11 @@
-package org.gefsu;
-
-import org.gefsu.http.HttpMethod;
+package org.gefsu.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+@Target({ElementType.CONSTRUCTOR, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface HttpRequestMapping {
-    HttpMethod method();
-    String url();
+public @interface Autowired {
 }

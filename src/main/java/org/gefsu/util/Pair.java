@@ -1,4 +1,4 @@
-package org.gefsu;
+package org.gefsu.util;
 
 public class Pair<L,R> {
     private final L left;

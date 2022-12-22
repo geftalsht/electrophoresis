@@ -1,12 +1,15 @@
 package org.gefsu;
 
+import org.gefsu.annotation.Autowired;
+import org.gefsu.annotation.RequestHandlers;
 import org.gefsu.http.HttpRequest;
 import org.gefsu.http.HttpResponse;
 
 public class RequestHandlerDispatcher {
-    private final HandlerMap requestHandlers;
+    @Autowired
+    private final RequestHandlers requestHandlers;
 
-    public RequestHandlerDispatcher(HandlerMap requestHandlers) {
+    public RequestHandlerDispatcher(RequestHandlers requestHandlers) {
         this.requestHandlers = requestHandlers;
     }
 
@@ -14,6 +17,7 @@ public class RequestHandlerDispatcher {
         final var requestMethod = request.getMethod();
         final var requestResource = request.getResource();
 
-        return requestHandlers.invokeHandler(requestMethod, requestResource);
+        return requestHandlers
+            .invokeHandler(requestMethod, requestResource);
     }
 }

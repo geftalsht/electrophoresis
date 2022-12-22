@@ -3,7 +3,7 @@ package org.gefsu.http;
 import java.io.InputStream;
 import java.util.Optional;
 
-import static org.gefsu.OptionalUtils.lift;
+import static org.gefsu.util.OptionalUtils.lift;
 
 // Scuffed HTTP Parser 0.1.0
 // At this moment it only parses the start line of an HTTP message

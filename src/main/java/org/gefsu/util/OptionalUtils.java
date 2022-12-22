@@ -1,4 +1,4 @@
-package org.gefsu;
+package org.gefsu.util;
 
 import java.util.Optional;
 

@@ -1,8 +1,11 @@
 package org.gefsu;
 
+import org.gefsu.annotation.HttpRequestMapping;
+import org.gefsu.annotation.RequestHandlers;
 import org.gefsu.http.HttpMethod;
 import org.gefsu.http.HttpResponse;
 import org.gefsu.http.HttpResponseBuilder;
+import org.gefsu.util.Pair;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -11,9 +14,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.gefsu.OptionalUtils.lift;
+import static org.gefsu.util.OptionalUtils.lift;
 
-public class HandlerMap {
+public class HandlerMap implements RequestHandlers {
     private final Map<HttpMethod,List<Pair<String,Pair<Object,Method>>>> requestHandlers;
 
     public static HandlerMap create(final List<Object> controllerObjects) {
